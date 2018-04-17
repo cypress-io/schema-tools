@@ -1,0 +1,92 @@
+{
+  "name": "@cypress/schema-tools",
+  "version": "0.0.0-development",
+  "description": "Schemas and schema validations",
+  "main": "dist",
+  "module": "src",
+  "types": "src",
+  "scripts": {
+    "prettier": "prettier --write 'src/**/*.ts'",
+    "lint": "tslint --project .",
+    "build": "tsc",
+    "prebuild": "npm run deps && npm run prettier",
+    "deps": "deps-ok",
+    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
+    "semantic-release": "semantic-release",
+    "pretest": "npm run build",
+    "test": "npm run unit",
+    "unit": "ava-ts --verbose test/*-test.ts",
+    "repl": "ts-node"
+  },
+  "keywords": [
+    "schema",
+    "json-schema",
+    "utility"
+  ],
+  "author": "Gleb Bahmutov <gleb@cypress.io>",
+  "license": "private",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "@bahmutov/all-paths": "1.0.2",
+    "debug": "3.1.0",
+    "is-my-json-valid": "2.17.2",
+    "json-stable-stringify": "1.0.1",
+    "lazy-ass": "1.6.0",
+    "lodash.camelcase": "4.3.0",
+    "lodash.clonedeep": "4.5.0",
+    "lodash.get": "4.4.2",
+    "lodash.set": "4.3.2",
+    "ramda": "0.25.0"
+  },
+  "devDependencies": {
+    "@types/lodash.camelcase": "4.3.3",
+    "@types/node": "9.6.2",
+    "@types/ramda": "0.25.21",
+    "ava": "0.25.0",
+    "ava-ts": "0.24.2",
+    "common-tags": "1.7.2",
+    "deps-ok": "1.3.0",
+    "husky": "0.15.0-rc.9",
+    "jsen": "0.6.6",
+    "json2md": "1.6.1",
+    "prettier": "1.11.1",
+    "quote": "0.4.0",
+    "semantic-release": "15.1.5",
+    "terminal-banner": "1.1.0",
+    "ts-node": "5.0.1",
+    "tslint": "5.9.1",
+    "typescript": "2.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cypress-io/schema-tools.git"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && npm run example"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "release": {
+    "analyzeCommits": {
+      "preset": "angular",
+      "releaseRules": [
+        {
+          "type": "break",
+          "release": "major"
+        }
+      ]
+    }
+  }
+}

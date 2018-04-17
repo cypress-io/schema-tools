@@ -1,0 +1,10 @@
+{
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "node_modules/": true,
+    "dist/": true
+  },
+  "workbench.colorTheme": "Snazzy Operator"
+}
