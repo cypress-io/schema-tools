@@ -1,7 +1,7 @@
 {
   "name": "@cypress/schema-tools",
   "version": "0.0.0-development",
-  "description": "Schemas and schema validations",
+  "description": "Validate, sanitize and document JSON schemas",
   "main": "dist",
   "module": "src",
   "types": "src",
