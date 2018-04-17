@@ -16,3 +16,6 @@ export const validateBySchema = api.validateBySchema
 
 export const sanitize = sanitizers.sanitize
 export const sanitizeBySchema = sanitizers.sanitizeBySchema
+
+export * from './objects'
+export * from './utils'
