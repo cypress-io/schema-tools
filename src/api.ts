@@ -18,13 +18,6 @@ import stringify from 'json-stable-stringify'
 const debug = debugApi('schema-tools')
 
 /**
- * Returns consistent name for a schema.
- *
- * @example normalizeName('membership_invitation') //> 'membershipInvitation'
- */
-export const normalizeName = utils.normalizeName
-
-/**
  * Returns object schema given a name and a version. Curried.
  * @param schemaName
  * @returns an object or undefined
@@ -33,7 +26,7 @@ export const normalizeName = utils.normalizeName
 export const getObjectSchema = (schemas: SchemaCollection) => (
   schemaName: string,
 ) => (version: SchemaVersion): ObjectSchema | undefined => {
-  schemaName = normalizeName(schemaName)
+  schemaName = utils.normalizeName(schemaName)
 
   const namedSchemas = schemas[schemaName]
   if (!namedSchemas) {
@@ -61,7 +54,7 @@ export const schemaNames = (schemas: SchemaCollection) =>
 export const getSchemaVersions = (schemas: SchemaCollection) => (
   schemaName: string,
 ) => {
-  schemaName = normalizeName(schemaName)
+  schemaName = utils.normalizeName(schemaName)
   if (schemas[schemaName]) {
     return Object.keys(schemas[schemaName])
   }
@@ -128,7 +121,7 @@ export const validate = (schemas: SchemaCollection) => (
   version: string,
   formats?: JsonSchemaFormats,
 ) => (object: object): true | string[] => {
-  schemaName = normalizeName(schemaName)
+  schemaName = utils.normalizeName(schemaName)
 
   const namedSchemas = schemas[schemaName]
   if (!namedSchemas) {

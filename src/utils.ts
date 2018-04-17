@@ -13,6 +13,11 @@ import { map, path, uniq } from 'ramda'
 export const semverToString = (s: Semver): string =>
   `${s.major}.${s.minor}.${s.patch}`
 
+/**
+ * Returns consistent name for a schema.
+ *
+ * @example normalizeName('membership_invitation') //> 'membershipInvitation'
+ */
 export const normalizeName = (s: string): string => camelCase(s)
 
 /**
