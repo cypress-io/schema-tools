@@ -201,11 +201,12 @@ export const assertBySchema = (
  *  .then(assertSchema('organization', '1.0.0', ['id']))
  *  .then(useOrganization)
  */
-export const assertSchema = (schemas: SchemaCollection) => (
-  name: string,
-  version: string,
-  substitutions: string[] = [],
-) => (object: PlainObject) => {
+export const assertSchema = (
+  schemas: SchemaCollection,
+  formats?: JsonSchemaFormats,
+) => (name: string, version: string, substitutions: string[] = []) => (
+  object: PlainObject,
+) => {
   const example = getExample(schemas)(name)(version)
   const schema = getObjectSchema(schemas)(name)(version)
   if (!schema) {
@@ -214,5 +215,7 @@ export const assertSchema = (schemas: SchemaCollection) => (
   // TODO we can read title and description from the JSON schema itself
   // so external label would not be necessary
   const label = `${name}@${version}`
-  return assertBySchema(schema.schema, example, substitutions, label)(object)
+  return assertBySchema(schema.schema, example, substitutions, label, formats)(
+    object,
+  )
 }
