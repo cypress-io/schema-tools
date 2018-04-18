@@ -1,4 +1,4 @@
-# @cypress/schema-tools
+# @cypress/schema-tools [![CircleCI](https://circleci.com/gh/cypress-io/schema-tools.svg?style=svg&circle-token=aa9b52bab9e9216699ba7258929f727b06b13afe)](https://circleci.com/gh/cypress-io/schema-tools)
 
 > Validate, sanitize and document JSON schemas
 
