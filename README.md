@@ -4,13 +4,42 @@
 
 ## Motivation
 
-* living testable documentation instead of manual Wiki editing
-* source of examples for tests and integrations
-* validating input and outputs from API calls
+Explicit JSON schemas describing objects passed in your system are good.
+
+* they are a living testable documentation instead of manual Wiki editing
+* provide examples for tests and integrations
+* validate inputs and outputs of the API calls
 
 ## API
 
+* [documentSchemas](#documentSchemas)
+
 TODO describe current API
+
+### documentSchemas
+
+You can document your schemas using provided method. Example code file
+
+```typescript
+import { documentSchemas } from '@cypress/schema-tools'
+import { schemas } from './schemas'
+import { formats } from './formats'
+console.log(documentSchemas(schemas, formats))
+```
+
+Call it from your NPM scripts
+
+```json
+{
+  "scripts": {
+    "document": "ts-node ./document.ts > schemas.md"
+  },
+  "devDependencies": {
+    "ts-node": "5.0.1",
+    "typescript": "2.8.1"
+  }
+}
+```
 
 ## Testing
 
