@@ -1,4 +1,4 @@
-# @cypress/schema-tools [![CircleCI](https://circleci.com/gh/cypress-io/schema-tools.svg?style=svg&circle-token=aa9b52bab9e9216699ba7258929f727b06b13afe)](https://circleci.com/gh/cypress-io/schema-tools)
+# @cypress/schema-tools [![CircleCI](https://circleci.com/gh/cypress-io/schema-tools.svg?style=svg&circle-token=aa9b52bab9e9216699ba7258929f727b06b13afe)](https://circleci.com/gh/cypress-io/schema-tools) [![renovate-app badge][renovate-badge]][renovate-app]
 
 > Validate, sanitize and document JSON schemas
 
@@ -60,3 +60,6 @@ npx ava-ts test/<file-name.ts> --verbose -u
 ## License
 
 This project is licensed under the terms of the [MIT license](LICENSE.md).
+
+[renovate-badge]: https://img.shields.io/badge/renovate-app-blue.svg
+[renovate-app]: https://renovateapp.com/
