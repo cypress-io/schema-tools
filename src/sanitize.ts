@@ -90,15 +90,20 @@ export const sanitizeBySchema = (
   return result
 }
 
-export const sanitize = (schemas: SchemaCollection) => (
-  name: string,
-  version: string,
-) => (object: PlainObject) => {
+/**
+ * Given a schema (by name and version) and an object, replaces dynamic values
+ * in the object with default values. Useful to replace UUIDs, timestamps, etc
+ * with defaults before comparing with expected value.
+ */
+export const sanitize = (
+  schemas: SchemaCollection,
+  formatDefaults?: FormatDefaults,
+) => (name: string, version: string) => (object: PlainObject) => {
   assertSchema(schemas)(name, version)(object)
   const schema = getObjectSchema(schemas)(name)(version)
   if (!schema) {
     throw new Error(`Could not schema ${name}@${version}`)
   }
 
-  return sanitizeBySchema(schema.schema)(object)
+  return sanitizeBySchema(schema.schema, formatDefaults)(object)
 }
