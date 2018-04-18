@@ -2,11 +2,20 @@ import test from 'ava'
 import json2md from 'json2md'
 import { documentSchema, findUsedColumns } from '../src/document/utils'
 import { documentCustomFormats } from '../src/document/doc-formats'
-// import { formatDefaults } from '../src/formats'
 import { JsonSchema } from '../src/objects'
 import { CustomFormats } from '../src/formats'
+import { schemas, exampleFormats } from './example-schemas'
+import { documentSchemas } from '../src'
 
-// TODO unit test documentation scripts in ../scripts/docs.ts
+test('documents just schemas', t => {
+  const markdown = documentSchemas(schemas)
+  t.snapshot(markdown)
+})
+
+test('documents schemas and custom formats', t => {
+  const markdown = documentSchemas(schemas, exampleFormats)
+  t.snapshot(markdown)
+})
 
 test('sublist', t => {
   const json = [

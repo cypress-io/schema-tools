@@ -1,5 +1,16 @@
 import { SchemaCollection, VersionedSchema } from '../src/objects'
 import { combineSchemas } from '../src/utils'
+import { CustomFormats, CustomFormat } from '../src'
+
+const name: CustomFormat = {
+  name: 'name',
+  description: 'Custom name format',
+  detect: /^[A-Z][a-z]+$/,
+}
+
+export const exampleFormats: CustomFormats = {
+  name,
+}
 
 const example: VersionedSchema = {
   '1.0.0': {
@@ -15,6 +26,7 @@ const example: VersionedSchema = {
       properties: {
         name: {
           type: 'string',
+          format: 'name',
           description: 'this object needs a name',
         },
         age: {

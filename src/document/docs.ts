@@ -21,7 +21,17 @@ import la from 'lazy-ass'
 const title = [{ h1: 'Schemas' }]
 const titleLink = [{ p: '[🔝](#schemas)' }]
 
-function documentSchemas(schemas: SchemaCollection, formats: CustomFormats) {
+/**
+ * Returns Markdown string describing the entire schema collection.
+ *
+ * @param {SchemaCollection} schemas Object with all schemas
+ * @param {CustomFormats} formats Custom formats (optional)
+ * @returns {string} Markdown
+ */
+export function documentSchemas(
+  schemas: SchemaCollection,
+  formats?: CustomFormats,
+): string {
   const toDoc = (schemaName: string) => {
     const versions = getSchemaVersions(schemas)(schemaName)
     if (!versions.length) {
@@ -94,13 +104,11 @@ function documentSchemas(schemas: SchemaCollection, formats: CustomFormats) {
     },
   ]
 
-  const list = (title as any[])
-    .concat(toc)
-    .concat(fragments)
-    .concat(documentCustomFormats(formats))
-    .concat(titleLink)
+  let list = (title as any[]).concat(toc).concat(fragments)
 
-  console.log(json2md(list))
+  if (formats) {
+    list = list.concat(documentCustomFormats(formats)).concat(titleLink)
+  }
+
+  return json2md(list)
 }
-
-module.exports = documentSchemas
