@@ -24,7 +24,7 @@
     "utility"
   ],
   "author": "Gleb Bahmutov <gleb@cypress.io>",
-  "license": "private",
+  "license": "MIT",
   "files": [
     "dist",
     "src"
@@ -54,7 +54,7 @@
     "json2md": "1.6.1",
     "prettier": "1.11.1",
     "quote": "0.4.0",
-    "semantic-release": "15.1.5",
+    "semantic-release": "^15.1.7",
     "terminal-banner": "1.1.0",
     "ts-node": "5.0.1",
     "tslint": "5.9.1",
@@ -65,7 +65,7 @@
     "url": "https://github.com/cypress-io/schema-tools.git"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "husky": {
     "hooks": {

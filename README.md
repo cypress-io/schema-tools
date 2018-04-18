@@ -27,3 +27,7 @@ To update snapshots and use verbose reporter (prints test names)
 ```
 npx ava-ts test/<file-name.ts> --verbose -u
 ```
+
+## License
+
+This project is licensed under the terms of the [MIT license](LICENSE.md).
