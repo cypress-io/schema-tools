@@ -64,7 +64,8 @@ export const sanitizeBySchema = (
           }
         } else if (isArrayType(prop) && hasPropertiesArray(prop)) {
           const list: PlainObject[] = object[key] as PlainObject[]
-          result[key] = list.map(sanitizeBySchema(prop.items as JsonSchema))
+          const propSchema: JsonSchema = prop.items as JsonSchema
+          result[key] = list.map(sanitizeBySchema(propSchema, formatDefaults))
           return
         }
       }

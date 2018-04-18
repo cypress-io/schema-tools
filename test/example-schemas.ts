@@ -6,6 +6,7 @@ const name: CustomFormat = {
   name: 'name',
   description: 'Custom name format',
   detect: /^[A-Z][a-z]+$/,
+  defaultValue: 'Buddy',
 }
 
 export const exampleFormats: CustomFormats = {

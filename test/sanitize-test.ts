@@ -1,8 +1,11 @@
 import test from 'ava'
 import { sanitize, sanitizeBySchema } from '../src/sanitize'
-import { schemas } from './example-schemas'
+import { schemas, exampleFormats } from './example-schemas'
 import stringify from 'json-stable-stringify'
 import { JsonSchema } from '../src/objects'
+import { getDefaults } from '../src/formats'
+
+const formatDefaults = getDefaults(exampleFormats)
 
 test('example sanitize', t => {
   const object = {
@@ -11,6 +14,19 @@ test('example sanitize', t => {
   }
   const result = sanitize(schemas)('example', '1.0.0')(object)
   t.snapshot(stringify(result, { space: '  ' }))
+})
+
+test('sanitize with default values', t => {
+  t.plan(1)
+  const object = {
+    name: 'joe',
+    age: 21,
+  }
+  const result = sanitize(schemas, formatDefaults)('example', '1.0.0')(object)
+  t.deepEqual(result, {
+    name: 'Buddy',
+    age: 21,
+  })
 })
 
 const schema: JsonSchema = {
