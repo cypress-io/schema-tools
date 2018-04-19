@@ -4,7 +4,7 @@
 
 ## Motivation
 
-Explicit JSON schemas describing objects passed around in your system are good!
+Explicit [JSON schemas][json-schema] describing objects passed around in your system are good!
 
 * they are a living testable documentation instead of manual Wiki editing
 * provide examples for tests and integrations
@@ -12,7 +12,7 @@ Explicit JSON schemas describing objects passed around in your system are good!
 
 ## Schemas
 
-Each individual schema object should have 3 parts: a version, an example and a JSON schema describing its properties. See [test/example-schemas.ts](test/example-schemas.ts). Start with a single `ObjectSchema` that describes a particular version of an object
+Each individual schema object should have 3 parts: a version, an example and a [JSON schema][json-schema] describing its properties. See [test/example-schemas.ts](test/example-schemas.ts). Start with a single `ObjectSchema` that describes a particular version of an object
 
 ```typescript
 import { ObjectSchema } from '@cypress/schema-tools'
@@ -131,3 +131,4 @@ This project is licensed under the terms of the [MIT license](LICENSE.md).
 
 [renovate-badge]: https://img.shields.io/badge/renovate-app-blue.svg
 [renovate-app]: https://renovateapp.com/
+[json-schema]: http://json-schema.org/
