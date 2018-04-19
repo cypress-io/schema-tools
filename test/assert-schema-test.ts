@@ -2,7 +2,7 @@ import test from 'ava'
 import { assertSchema } from '../src'
 import { schemas } from './example-schemas'
 
-const assertExample100 = assertSchema(schemas)('Example', '1.0.0')
+const assertExample100 = assertSchema(schemas)('Person', '1.0.0')
 
 test('is a function', t => {
   t.is(typeof assertSchema, 'function')
@@ -46,7 +46,7 @@ test('passing membership invitation 1.0.0 with field substitution', t => {
     age: -1,
   }
   // replace "id" value with value from the example
-  const assert = assertSchema(schemas)('Example', '1.0.0', ['age'])
+  const assert = assertSchema(schemas)('Person', '1.0.0', ['age'])
   const fn = () => assert(o)
   t.notThrows(fn)
 })

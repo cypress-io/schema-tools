@@ -5,6 +5,8 @@ import stringify from 'json-stable-stringify'
 import { JsonSchema } from '../src/objects'
 import { getDefaults } from '../src/formats'
 
+const schemaName = 'person'
+const schemaVersion = '1.0.0'
 const formatDefaults = getDefaults(exampleFormats)
 
 test('example sanitize', t => {
@@ -12,7 +14,7 @@ test('example sanitize', t => {
     name: 'joe',
     age: 21,
   }
-  const result = sanitize(schemas)('example', '1.0.0')(object)
+  const result = sanitize(schemas)(schemaName, schemaVersion)(object)
   t.snapshot(stringify(result, { space: '  ' }))
 })
 
@@ -22,7 +24,9 @@ test('sanitize with default values', t => {
     name: 'joe',
     age: 21,
   }
-  const result = sanitize(schemas, formatDefaults)('example', '1.0.0')(object)
+  const result = sanitize(schemas, formatDefaults)(schemaName, schemaVersion)(
+    object,
+  )
   t.deepEqual(result, {
     name: 'Buddy',
     age: 21,

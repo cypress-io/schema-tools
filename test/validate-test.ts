@@ -3,7 +3,7 @@ import { validate, validateBySchema } from '../src'
 import { JsonSchema } from '../src/objects'
 import { schemas } from './example-schemas'
 
-const validateExample100 = validate(schemas)('example', '1.0.0')
+const validateExample100 = validate(schemas)('person', '1.0.0')
 
 test('is a function', t => {
   t.is(typeof validate, 'function')
@@ -17,7 +17,7 @@ test('passing membership invitation 1.0.0', t => {
   t.truthy(validateExample100(o))
 })
 
-test('missing name membership invitation 1.0.0', t => {
+test('missing name 1.0.0', t => {
   const o = {
     age: 1,
   }
