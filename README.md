@@ -59,7 +59,7 @@ const person100: ObjectSchema = { ... }
 const person110: ObjectSchema = { ... }
 // some big changes
 const person200: ObjectSchema = { ... }
-const personVersions: VersionedSchema = versionSchemas(person100)
+const personVersions: VersionedSchema = versionSchemas(person100, person110, person200)
 ```
 
 Finally, you probably have "Person" versioned schema, and maybe "Organization" and maybe some other schemas. So put them into a single collection
