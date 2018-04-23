@@ -10,6 +10,10 @@ import cloneDeep from 'lodash.clonedeep'
 import la from 'lazy-ass'
 import { map, path, uniq } from 'ramda'
 
+/**
+ * converts semantic version object into a string.
+ * @example semverToString({major: 1, minor: 2, patch: 3}) // "1.2.3"
+ */
 export const semverToString = (s: Semver): string =>
   `${s.major}.${s.minor}.${s.patch}`
 

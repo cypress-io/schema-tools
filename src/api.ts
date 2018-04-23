@@ -77,6 +77,10 @@ export const getExample = (schemas: SchemaCollection) => (
   return o.example
 }
 
+/**
+ * Error returned by the json validation library.
+ * Has an error message for specific property
+ */
 type ValidationError = {
   field: string
   message: string
@@ -116,11 +120,12 @@ export const validateBySchema = (
  *  If there are any validation errors returns list of strings
  *
  */
-export const validate = (schemas: SchemaCollection) => (
-  schemaName: string,
-  version: string,
+export const validate = (
+  schemas: SchemaCollection,
   formats?: JsonSchemaFormats,
-) => (object: object): true | string[] => {
+) => (schemaName: string, version: string) => (
+  object: object,
+): true | string[] => {
   schemaName = utils.normalizeName(schemaName)
 
   const namedSchemas = schemas[schemaName]

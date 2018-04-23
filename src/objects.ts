@@ -18,6 +18,14 @@ export type PlainObject = {
  */
 export type SchemaVersion = string
 
+/**
+ * Name and version tuple
+ */
+export type NameVersion = {
+  name: string
+  version: SchemaVersion
+}
+
 export type JsonPropertyTypes =
   | 'number'
   | 'integer'

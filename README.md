@@ -118,7 +118,8 @@ Checks a given object against a schema and returns list of errors if the object 
 import { validate } from '@cypress/schema-tools'
 // see example in ./test/example-schemas.ts
 import { schemas } from './my-schemas'
-const validatePerson100 = validate(schemas)('person', '1.0.0')
+import { formats } from './my-formats'
+const validatePerson100 = validate(schemas, formats)('person', '1.0.0')
 const result = validatePerson100(someObject)
 if (result === true) {
   // all good
