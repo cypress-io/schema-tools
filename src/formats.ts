@@ -14,17 +14,23 @@ export type CustomFormat = {
   example?: string | number
 }
 
-// TODO needs documentation
+/**
+ * A collection of custom formats by name
+ */
 export type CustomFormats = {
   [key: string]: CustomFormat
 }
 
-// TODO needs documentation
+/**
+ * Collection of regular expressions to use to validate custom formats
+ */
 export type JsonSchemaFormats = {
   [key: string]: RegExp
 }
 
-// TODO needs documentation
+/**
+ * Returns object of regular expressions used to detect custom formats
+ */
 export const detectors = (formats: CustomFormats) => {
   const result: JsonSchemaFormats = {}
   Object.keys(formats).forEach(name => {
@@ -47,12 +53,16 @@ export const regexAsPatternKey = (r: RegExp): string => {
   return middle
 }
 
-// TODO needs documentation
+/**
+ * An object with default values for custom properties
+ */
 export type FormatDefaults = {
   [key: string]: string | number
 }
 
-// TODO needs documentation
+/**
+ * Given an object of custom formats returns all default values (if any)
+ */
 export const getDefaults = (formats: CustomFormats) => {
   const result: FormatDefaults = {}
   Object.keys(formats).forEach(key => {
