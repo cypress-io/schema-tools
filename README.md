@@ -76,7 +76,53 @@ Now you can use the `schemas` object to validate and sanitize any object.
 
 ## Formats
 
-TODO describe custom formats that can extend the JSON schema built-in ones
+In addition to the [formats included with JSON-schemas](https://spacetelescope.github.io/understanding-json-schema/reference/string.html#built-in-formats) you can define custom formats that will be used to validate values. Start with a single custom format to describe an UUID for example
+
+```typescript
+// single custom format
+import { CustomFormat, CustomFormats } from '@cypress/schema-tools'
+const uuid: CustomFormat = {
+  name: 'uuid', // the name
+  description: 'GUID used through the system',
+  // regular expression to use to validate value
+  detect: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
+  // (optional) replace actual value with this default value
+  // when using to sanitize an object
+  defaultValue: 'ffffffff-ffff-ffff-ffff-ffffffffffff',
+}
+// export all custom formats, in our case just 1
+export const formats: CustomFormats = { uuid }
+```
+
+Now every time you use your schemas, pass the formats too so that the validator knows how to check values from custom formats.
+
+```typescript
+// example JSON schema using uuid custom format
+const person100: ObjectSchema = {
+  // has semantic version numbers
+  version: {
+    major: 1,
+    minor: 0,
+    patch: 0,
+  },
+  // JSON schema
+  schema: {
+    type: 'object',
+    title: 'Person',
+    properties: {
+      id: {
+        type: 'string,
+        format: 'uuid
+      }
+    }
+  },
+  example: {
+    id: 'a368dbfd-08e4-4698-b9a3-b2b660a11835'
+  }
+}
+// person100 goes into "schemas", then
+assertSchema(schemas, formats)('person', '1.0.0')(someObject)
+```
 
 ## API
 
