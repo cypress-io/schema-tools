@@ -45,7 +45,7 @@ test('passing membership invitation 1.0.0 with field substitution', t => {
     name: 'Joe',
     age: -1,
   }
-  // replace "id" value with value from the example
+  // replace "age" value with value from the example
   const assert = assertSchema(schemas)('Person', '1.0.0', ['age'])
   const fn = () => assert(o)
   t.notThrows(fn)

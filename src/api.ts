@@ -143,6 +143,52 @@ export const validate = (
   return validateBySchema(aSchema.schema, formats)(object)
 }
 
+/**
+ * Error thrown when an object does not pass schema.
+ *
+ * @export
+ * @class SchemaError
+ * @extends {Error}
+ */
+export class SchemaError extends Error {
+  /**
+   * List of individual errors
+   *
+   * @type {string[]}
+   * @memberof SchemaError
+   */
+  errors: string[]
+
+  /**
+   * Current object being validated
+   *
+   * @type {PlainObject}
+   * @memberof SchemaError
+   */
+  object: PlainObject
+
+  /**
+   * Example object from the schema
+   *
+   * @type {PlainObject}
+   * @memberof SchemaError
+   */
+  example: PlainObject
+
+  constructor(
+    message: string,
+    errors: string[],
+    object: PlainObject,
+    example: PlainObject,
+  ) {
+    super(message)
+    Object.setPrototypeOf(this, new.target.prototype)
+    this.errors = errors
+    this.object = object
+    this.example = example
+  }
+}
+
 export const assertBySchema = (
   schema: JsonSchema,
   example: PlainObject = {},
@@ -179,7 +225,8 @@ export const assertBySchema = (
     '\n\n' +
     'Expected object like this:\n' +
     exampleString
-  throw new Error(message)
+
+  throw new SchemaError(message, result, object, example)
 }
 
 /**

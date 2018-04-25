@@ -128,6 +128,7 @@ assertSchema(schemas, formats)('person', '1.0.0')(someObject)
 
 * [documentSchemas](#documentSchemas)
 * [validate](#validate)
+* [SchemaError](#schemaError)
 
 TODO describe current API
 
@@ -181,6 +182,14 @@ Typical validation messages are
 data.createdAt is required
 data.createdAt must be date-time format
 ```
+
+### SchemaError
+
+When asserting an object against a schema a custom error is thrown. It is an instance of `Error`, with a very detailed message. It also has additional properties.
+
+* `errors` is the list of strings with individual validation errors
+* `object` the object being validated
+* `example` example object for the schema
 
 ## Testing
 
