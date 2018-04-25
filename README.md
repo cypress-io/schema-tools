@@ -190,7 +190,7 @@ Checks a given object against schemas (and formats) and throws a [SchemaError](#
 
 ```js
 try {
-  assertSchema(schemas)('Person', '1.0.0')(object)
+  assertSchema(schemas, formats)('Person', '1.0.0')(object)
 } catch (e) {
   console.error(e.message)
   // can also inspect individual fields, see SchemaError
