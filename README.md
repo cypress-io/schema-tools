@@ -129,7 +129,7 @@ assertSchema(schemas, formats)('person', '1.0.0')(someObject)
 * [documentSchemas](#documentSchemas)
 * [validate](#validate)
 * [assertSchema](#assertSchema)
-* [SchemaError](#schemaError)
+* [SchemaError](#schemaerror)
 
 TODO describe current API
 
@@ -186,7 +186,7 @@ data.createdAt must be date-time format
 
 ### assertSchema
 
-Checks a given object against schemas (and formats) and throws a [SchemaError](#schemaError) if the object violates the given schema.
+Checks a given object against schemas (and formats) and throws a [SchemaError](#schemaerror) if the object violates the given schema.
 
 ```js
 try {
