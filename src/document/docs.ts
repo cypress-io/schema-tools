@@ -17,7 +17,9 @@ import { flatten, toLower } from 'ramda'
 import { SchemaCollection } from '../objects'
 import { CustomFormats } from '../formats'
 import la from 'lazy-ass'
+import quote from 'quote'
 
+const ticks = quote({ quotes: '`' })
 const title = [{ h1: 'Schemas' }]
 const titleLink = [{ p: '[🔝](#schemas)' }]
 
@@ -47,6 +49,11 @@ export function documentSchemas(
       const schemaDoc = documentSchema(schema.schema)
 
       const start: any[] = [{ h3: `${schemaName}@${version}` }]
+      if (schema.package) {
+        start.push({
+          p: `Defined in ${ticks(schema.package)}`,
+        })
+      }
       if (schema.schema.description) {
         start.push({ p: schema.schema.description })
       }

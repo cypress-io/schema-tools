@@ -158,6 +158,16 @@ Call it from your NPM scripts
 }
 ```
 
+If you want to tell where a schema is coming from, you can set package name, which will add a note to the output Markdown
+
+```typescript
+import { setPackageName, documentSchemas } from '@cypress/schema-tools'
+import { schemas } from './schemas'
+setPackageName(schemas, 'my-schemas')
+console.log(documentSchemas(schemas, formats))
+// each schema will have a note that it was defined in "my-schemas"
+```
+
 ### validate
 
 Checks a given object against a schema and returns list of errors if the object does not pass the schema. Returns `true` if the object passes schema, and a list of strings if there are errors (I know, we should use [Either or Validation](http://folktale.origamitower.com/api/v2.1.0/en/folktale.validation.html)).

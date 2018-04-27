@@ -17,6 +17,13 @@ import stringify from 'json-stable-stringify'
 
 const debug = debugApi('schema-tools')
 
+export const getVersionedSchema = (schemas: SchemaCollection) => (
+  name: string,
+) => {
+  name = utils.normalizeName(name)
+  return schemas[name]
+}
+
 /**
  * Returns object schema given a name and a version. Curried.
  * @param schemaName

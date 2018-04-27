@@ -5,7 +5,8 @@ import { documentCustomFormats } from '../src/document/doc-formats'
 import { JsonSchema } from '../src/objects'
 import { CustomFormats } from '../src/formats'
 import { schemas, exampleFormats } from './example-schemas'
-import { documentSchemas } from '../src'
+import { documentSchemas, setPackageName } from '../src'
+import { clone } from 'ramda'
 
 test('documents just schemas', t => {
   const markdown = documentSchemas(schemas)
@@ -15,6 +16,14 @@ test('documents just schemas', t => {
 test('documents schemas and custom formats', t => {
   const markdown = documentSchemas(schemas, exampleFormats)
   t.snapshot(markdown)
+})
+
+test('documents schemas with package name', t => {
+  t.plan(1)
+  const schemasWithName = clone(schemas)
+  setPackageName(schemasWithName, 'test-package')
+  const markdown = documentSchemas(schemasWithName, exampleFormats)
+  t.true(markdown.includes('Defined in `test-package`'))
 })
 
 test('sublist', t => {

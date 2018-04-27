@@ -1,8 +1,9 @@
-import { schemaNames, getExample } from '../src'
+import { schemaNames, getExample, setPackageName } from '../src'
 import { schemas } from './example-schemas'
 import test from 'ava'
 import { JsonSchema } from '../src/objects'
 import validator from 'is-my-json-valid'
+import { clone } from 'ramda'
 
 test('has schema names', t => {
   t.is(typeof schemaNames, 'function')
@@ -40,4 +41,11 @@ test('optional uri field', t => {
   t.true(valid({}), 'undefined url property')
   t.true(valid({ url: null }), 'null url property')
   t.false(valid({ url: 'foo' }), 'invalid url format')
+})
+
+test('sets package name', t => {
+  t.plan(1)
+  const schemasWithName = clone(schemas)
+  setPackageName(schemasWithName, 'test-package')
+  t.is(schemasWithName.person['1.0.0'].package, 'test-package')
 })

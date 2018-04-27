@@ -44,6 +44,26 @@ export const versionSchemas = (...schemas: ObjectSchema[]) => {
 }
 
 /**
+ * Sets name for each schema in the collection.
+ * Note: mutates the input collection
+ */
+export const setPackageName = (
+  schemas: SchemaCollection,
+  packageName: string,
+) => {
+  Object.keys(schemas).forEach(name => {
+    Object.keys(schemas[name]).forEach(version => {
+      const schema = schemas[name][version]
+      if (!schema.package) {
+        schema.package = packageName
+      }
+    })
+  })
+  // returns modified schemas just for convenience
+  return schemas
+}
+
+/**
  * Combines multiple versioned schemas into single object
  *
  * @example combineSchemas(BillingPlan, GetRunResponse, ...)

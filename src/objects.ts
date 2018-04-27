@@ -73,6 +73,10 @@ export type ObjectSchema = {
   version: Semver
   schema: JsonSchema
   example: PlainObject
+  /**
+   * Usually the name of the package this schema is defined in.
+   */
+  package?: string
 }
 
 export type VersionedSchema = {
