@@ -37,6 +37,43 @@ test('missing name membership invitation 1.0.0', t => {
   }
 })
 
+test('has schema name and version in the error object', t => {
+  t.plan(2)
+
+  const o = {
+    // missing name on purpose
+    age: 10,
+  }
+  const fn = () => assertExample100(o)
+
+  try {
+    fn()
+  } catch (e) {
+    t.is(e.schemaName, 'Person')
+    t.is(e.schemaVersion, '1.0.0')
+  }
+})
+
+test('has input object and example in the error object', t => {
+  t.plan(2)
+
+  const o = {
+    // missing name on purpose
+    age: 10,
+  }
+  const fn = () => assertExample100(o)
+
+  try {
+    fn()
+  } catch (e) {
+    t.is(e.object, o)
+    t.deepEqual(e.example, {
+      name: 'Joe',
+      age: 10,
+    })
+  }
+})
+
 test('passing membership invitation 1.0.0 with field substitution', t => {
   t.plan(1)
 

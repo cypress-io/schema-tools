@@ -214,6 +214,8 @@ When asserting an object against a schema a custom error is thrown. It is an ins
 * `errors` is the list of strings with individual validation errors
 * `object` the object being validated
 * `example` example object for the schema
+* `schemaName` is the title of the schema, like `Person`
+* `schemaVersion` the version like `1.0.0` of the schema violated, if known.
 
 ## Testing
 

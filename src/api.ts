@@ -182,17 +182,39 @@ export class SchemaError extends Error {
    */
   example: PlainObject
 
+  /**
+   * Name of the schema that failed
+   *
+   * @type {string}
+   * @memberof SchemaError
+   */
+  schemaName: string
+
+  /**
+   * Version of the schema violated
+   *
+   * @type {string}
+   * @memberof SchemaError
+   */
+  schemaVersion?: string
+
   constructor(
     message: string,
     errors: string[],
     object: PlainObject,
     example: PlainObject,
+    schemaName: string,
+    schemaVersion?: string,
   ) {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
     this.errors = errors
     this.object = object
     this.example = example
+    this.schemaName = schemaName
+    if (schemaVersion) {
+      this.schemaVersion = schemaVersion
+    }
   }
 }
 
@@ -202,6 +224,7 @@ export const assertBySchema = (
   substitutions: string[] = [],
   label?: string,
   formats?: JsonSchemaFormats,
+  schemaVersion?: SchemaVersion,
 ) => (object: PlainObject) => {
   const replace = () => {
     const cloned = cloneDeep(object)
@@ -233,7 +256,14 @@ export const assertBySchema = (
     'Expected object like this:\n' +
     exampleString
 
-  throw new SchemaError(message, result, object, example)
+  throw new SchemaError(
+    message,
+    result,
+    object,
+    example,
+    schema.title,
+    schemaVersion,
+  )
 }
 
 /**
@@ -267,7 +297,12 @@ export const assertSchema = (
   // TODO we can read title and description from the JSON schema itself
   // so external label would not be necessary
   const label = `${name}@${version}`
-  return assertBySchema(schema.schema, example, substitutions, label, formats)(
-    object,
-  )
+  return assertBySchema(
+    schema.schema,
+    example,
+    substitutions,
+    label,
+    formats,
+    utils.semverToString(schema.version),
+  )(object)
 }

@@ -4,6 +4,7 @@ import {
   JsonPropertyTypes,
   VersionedSchema,
   SchemaCollection,
+  SchemaVersion,
 } from './objects'
 import camelCase from 'lodash.camelcase'
 import cloneDeep from 'lodash.clonedeep'
@@ -14,7 +15,7 @@ import { map, path, uniq } from 'ramda'
  * converts semantic version object into a string.
  * @example semverToString({major: 1, minor: 2, patch: 3}) // "1.2.3"
  */
-export const semverToString = (s: Semver): string =>
+export const semverToString = (s: Semver): SchemaVersion =>
   `${s.major}.${s.minor}.${s.patch}`
 
 /**
