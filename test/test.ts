@@ -2,7 +2,7 @@ import { schemaNames, getExample, setPackageName } from '../src'
 import { schemas } from './example-schemas'
 import test from 'ava'
 import { JsonSchema } from '../src/objects'
-import validator from 'is-my-json-valid'
+import validator from '@bahmutov/is-my-json-valid'
 import { clone } from 'ramda'
 
 test('has schema names', t => {

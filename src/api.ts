@@ -9,7 +9,7 @@ import {
 import * as utils from './utils'
 import { JsonSchemaFormats } from './formats'
 import debugApi from 'debug'
-import validator from 'is-my-json-valid'
+import validator from '@bahmutov/is-my-json-valid'
 import cloneDeep from 'lodash.clonedeep'
 import set from 'lodash.set'
 import get from 'lodash.get'
