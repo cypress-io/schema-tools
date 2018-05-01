@@ -47,7 +47,7 @@
     "@types/node": "9.6.8",
     "@types/ramda": "0.25.24",
     "ava": "0.25.0",
-    "ava-ts": "0.24.4",
+    "ava-ts": "0.24.5",
     "common-tags": "1.7.2",
     "deps-ok": "1.4.1",
     "husky": "0.15.0-rc.13",
