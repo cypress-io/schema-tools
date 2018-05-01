@@ -23,6 +23,13 @@ const knownSchemaNames = (schemas: SchemaCollection) => schemaNames(schemas)
 const isSchemaName = (schemas: SchemaCollection) => (s: string) =>
   knownSchemaNames(schemas).includes(normalizeName(s))
 
+export const enumToMarkdown = enumeration => {
+  if (!enumeration) {
+    return emptyMark
+  }
+  return ticks(enumeration.map(JSON.stringify).join(', '))
+}
+
 export const formatToMarkdown = value => {
   if (!value.format) {
     if (value.see) {
@@ -53,6 +60,7 @@ type PropertyDescription = {
   required: string
   format: string
   description: string
+  enum: string
 }
 
 export const documentProperties = (
@@ -71,6 +79,7 @@ export const documentProperties = (
         type: typeText(value.type),
         required: isRequired(prop) ? checkMark : emptyMark,
         format: formatToMarkdown(value),
+        enum: enumToMarkdown(value.enum),
         description: value.description ? value.description : emptyMark,
       }
     })
@@ -84,7 +93,14 @@ export const documentSchema = (schema: JsonSchema) => {
       properties,
       schema.required,
     )
-    const headers = ['name', 'type', 'required', 'format', 'description']
+    const headers = [
+      'name',
+      'type',
+      'required',
+      'format',
+      'enum',
+      'description',
+    ]
     const usedHeaders = findUsedColumns(headers, rows)
     const table: object[] = [
       {

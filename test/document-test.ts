@@ -29,6 +29,11 @@ test('document properties', t => {
       type: 'string',
       description: 'Property foo',
     },
+    bar: {
+      type: 'string',
+      enum: ['A', 'B'],
+      description: 'Can only be choice a or b',
+    },
   }
   const result = documentProperties(properties)
   t.snapshot(result)
@@ -127,6 +132,20 @@ test('custom formats', t => {
   t.snapshot(json2md(result))
 })
 
-// test('default values for custom formats', t => {
-//   t.snapshot(formatDefaults)
-// })
+test('JSON schema with enumeration to Markdown', t => {
+  const schema: JsonSchema = {
+    title: 'test schema',
+    type: 'object',
+    properties: {
+      id: {
+        type: 'string',
+      },
+      name: {
+        type: 'string',
+        enum: ['joe', 'mary'],
+      },
+    },
+  }
+  const result = json2md(documentSchema(schema))
+  t.snapshot(result)
+})
