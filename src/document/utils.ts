@@ -1,4 +1,4 @@
-import { JsonSchema, SchemaCollection } from '../objects'
+import { JsonSchema, JsonProperties, SchemaCollection } from '../objects'
 import { schemaNames, normalizeName } from '..'
 import { CustomFormats } from '../formats'
 import { toLower, find } from 'ramda'
@@ -47,26 +47,43 @@ export const findUsedColumns = (headers: string[], rows: object[]) => {
   return usedHeaders
 }
 
-export const documentSchema = (schema: JsonSchema) => {
-  const properties = schema.properties
-  const required = schema.required || []
+type PropertyDescription = {
+  name: string
+  type: string
+  required: string
+  format: string
+  description: string
+}
+
+export const documentProperties = (
+  properties: JsonProperties,
+  required: string[] = [],
+): PropertyDescription[] => {
   const isRequired = name => required.indexOf(name) !== -1
   const typeText = type => (Array.isArray(type) ? type.join(' or ') : type)
 
-  if (properties) {
-    const rows = Object.keys(properties)
-      .sort()
-      .map(prop => {
-        const value = properties[prop]
-        return {
-          name: ticks(prop),
-          type: typeText(value.type),
-          required: isRequired(prop) ? checkMark : emptyMark,
-          format: formatToMarkdown(value),
-          description: value.description ? value.description : emptyMark,
-        }
-      })
+  return Object.keys(properties)
+    .sort()
+    .map(prop => {
+      const value = properties[prop]
+      return {
+        name: ticks(prop),
+        type: typeText(value.type),
+        required: isRequired(prop) ? checkMark : emptyMark,
+        format: formatToMarkdown(value),
+        description: value.description ? value.description : emptyMark,
+      }
+    })
+}
 
+export const documentSchema = (schema: JsonSchema) => {
+  const properties = schema.properties
+
+  if (properties) {
+    const rows: PropertyDescription[] = documentProperties(
+      properties,
+      schema.required,
+    )
     const headers = ['name', 'type', 'required', 'format', 'description']
     const usedHeaders = findUsedColumns(headers, rows)
     const table: object[] = [

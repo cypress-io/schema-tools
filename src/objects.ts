@@ -52,7 +52,7 @@ export type JsonProperty = {
   enum?: string[]
 }
 
-type JsonProperties = {
+export type JsonProperties = {
   [key: string]: JsonProperty
 }
 

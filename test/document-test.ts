@@ -1,8 +1,12 @@
 import test from 'ava'
 import json2md from 'json2md'
-import { documentSchema, findUsedColumns } from '../src/document/utils'
+import {
+  documentSchema,
+  findUsedColumns,
+  documentProperties,
+} from '../src/document/utils'
 import { documentCustomFormats } from '../src/document/doc-formats'
-import { JsonSchema } from '../src/objects'
+import { JsonSchema, JsonProperties } from '../src/objects'
 import { CustomFormats } from '../src/formats'
 import { schemas, exampleFormats } from './example-schemas'
 import { documentSchemas, setPackageName } from '../src'
@@ -16,6 +20,18 @@ test('documents just schemas', t => {
 test('documents schemas and custom formats', t => {
   const markdown = documentSchemas(schemas, exampleFormats)
   t.snapshot(markdown)
+})
+
+test('document properties', t => {
+  t.plan(1)
+  const properties: JsonProperties = {
+    foo: {
+      type: 'string',
+      description: 'Property foo',
+    },
+  }
+  const result = documentProperties(properties)
+  t.snapshot(result)
 })
 
 test('documents schemas with package name', t => {
