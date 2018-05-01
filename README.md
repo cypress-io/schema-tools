@@ -111,8 +111,8 @@ const person100: ObjectSchema = {
     title: 'Person',
     properties: {
       id: {
-        type: 'string,
-        format: 'uuid
+        type: 'string',
+        format: 'uuid'
       }
     }
   },
