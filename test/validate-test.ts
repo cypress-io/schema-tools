@@ -42,7 +42,34 @@ const schema: JsonSchema = {
     },
   },
   required: ['createdAt', 'name', 'hook'],
+  additionalProperties: false,
 }
+
+test('lists additional properties', t => {
+  t.plan(3)
+
+  const o = {
+    createdAt: new Date().toISOString(),
+    name: 'Joe',
+    hook: 'h1',
+    // additional properties on purpose
+    foo: 1,
+    bar: 2,
+  }
+  const example = {
+    createdAt: 'a',
+    name: 'b',
+    hook: 'c',
+  }
+  const result = validateBySchema(schema, undefined, example)(o)
+  t.true(Array.isArray(result))
+
+  if (Array.isArray(result)) {
+    t.is(result.length, 1, 'does not repeat same error')
+  }
+
+  t.deepEqual(result, ['data has additional properties: foo, bar'])
+})
 
 test('validates object by schema', t => {
   const o = {

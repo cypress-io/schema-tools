@@ -13,6 +13,7 @@ import validator from '@bahmutov/is-my-json-valid'
 import cloneDeep from 'lodash.clonedeep'
 import set from 'lodash.set'
 import get from 'lodash.get'
+import { uniq, find, whereEq, difference, keys, uniqBy } from 'ramda'
 import stringify from 'json-stable-stringify'
 
 const debug = debugApi('schema-tools')
@@ -93,12 +94,28 @@ type ValidationError = {
   message: string
 }
 
+const dataHasAdditionalPropertiesValidationError = {
+  field: 'data',
+  message: 'has additional properties',
+}
+
+const findDataHasAdditionalProperties = find(
+  whereEq(dataHasAdditionalPropertiesValidationError),
+)
+
+const includesDataHasAdditionalPropertiesError = (
+  errors: ValidationError[],
+): boolean => findDataHasAdditionalProperties(errors) !== undefined
+
+const errorToString = (error: ValidationError): string =>
+  `${error.field} ${error.message}`
+
 /**
  * Flattens validation errors into user-friendlier strings
  */
 
 const errorsToStrings = (errors: ValidationError[]): string[] =>
-  errors.map(({ field, message }) => `${field} ${message}`)
+  errors.map(errorToString)
 
 /**
  * Validates given object using JSON schema. Returns either 'true' or list of string errors
@@ -106,6 +123,7 @@ const errorsToStrings = (errors: ValidationError[]): string[] =>
 export const validateBySchema = (
   schema: JsonSchema,
   formats?: JsonSchemaFormats,
+  example?: PlainObject,
 ) => (object: object): true | string[] => {
   // TODO this could be cached, or even be part of the loaded module
   // when validating use our additional formats, like "uuid"
@@ -113,7 +131,21 @@ export const validateBySchema = (
   if (validate(object)) {
     return true
   }
-  const errors = errorsToStrings(validate.errors)
+
+  const uniqueErrors: ValidationError[] = uniqBy(errorToString, validate.errors)
+
+  if (includesDataHasAdditionalPropertiesError(uniqueErrors) && example) {
+    const hasData: ValidationError = findDataHasAdditionalProperties(
+      uniqueErrors,
+    ) as ValidationError
+    const additionalProperties: string[] = difference(
+      keys(object),
+      keys(example),
+    )
+    hasData.message += ': ' + additionalProperties.join(', ')
+  }
+
+  const errors = uniq(errorsToStrings(uniqueErrors))
   return errors
 }
 
@@ -147,7 +179,7 @@ export const validate = (
 
   // TODO this could be cached, or even be part of the loaded module
   // when validating use our additional formats, like "uuid"
-  return validateBySchema(aSchema.schema, formats)(object)
+  return validateBySchema(aSchema.schema, formats, aSchema.example)(object)
 }
 
 /**
