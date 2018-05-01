@@ -45,7 +45,7 @@ const schema: JsonSchema = {
   additionalProperties: false,
 }
 
-test('lists additional properties', t => {
+test.only('lists additional properties', t => {
   t.plan(3)
 
   const o = {
@@ -56,12 +56,7 @@ test('lists additional properties', t => {
     foo: 1,
     bar: 2,
   }
-  const example = {
-    createdAt: 'a',
-    name: 'b',
-    hook: 'c',
-  }
-  const result = validateBySchema(schema, undefined, example)(o)
+  const result = validateBySchema(schema, undefined)(o)
   t.true(Array.isArray(result))
 
   if (Array.isArray(result)) {

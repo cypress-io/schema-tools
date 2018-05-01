@@ -87,3 +87,20 @@ test('passing membership invitation 1.0.0 with field substitution', t => {
   const fn = () => assert(o)
   t.notThrows(fn)
 })
+
+test('lists additional properties', t => {
+  t.plan(1)
+
+  const o = {
+    name: 'test',
+    age: 1,
+    // notice additional property
+    foo: 'bar',
+  }
+  const assert = assertSchema(schemas)('Person', '1.0.0')
+  try {
+    assert(o)
+  } catch (e) {
+    t.deepEqual(e.errors, ['data has additional properties: foo'])
+  }
+})

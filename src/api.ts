@@ -123,7 +123,6 @@ const errorsToStrings = (errors: ValidationError[]): string[] =>
 export const validateBySchema = (
   schema: JsonSchema,
   formats?: JsonSchemaFormats,
-  example?: PlainObject,
 ) => (object: object): true | string[] => {
   // TODO this could be cached, or even be part of the loaded module
   // when validating use our additional formats, like "uuid"
@@ -134,13 +133,16 @@ export const validateBySchema = (
 
   const uniqueErrors: ValidationError[] = uniqBy(errorToString, validate.errors)
 
-  if (includesDataHasAdditionalPropertiesError(uniqueErrors) && example) {
+  if (
+    includesDataHasAdditionalPropertiesError(uniqueErrors) &&
+    keys(schema.properties).length
+  ) {
     const hasData: ValidationError = findDataHasAdditionalProperties(
       uniqueErrors,
     ) as ValidationError
     const additionalProperties: string[] = difference(
       keys(object),
-      keys(example),
+      keys(schema.properties),
     )
     hasData.message += ': ' + additionalProperties.join(', ')
   }
@@ -179,7 +181,7 @@ export const validate = (
 
   // TODO this could be cached, or even be part of the loaded module
   // when validating use our additional formats, like "uuid"
-  return validateBySchema(aSchema.schema, formats, aSchema.example)(object)
+  return validateBySchema(aSchema.schema, formats)(object)
 }
 
 /**

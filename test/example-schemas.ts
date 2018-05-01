@@ -37,6 +37,7 @@ const person100: ObjectSchema = {
       },
     },
     required: ['name', 'age'],
+    additionalProperties: false,
   },
   example: {
     name: 'Joe',
