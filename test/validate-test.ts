@@ -45,7 +45,7 @@ const schema: JsonSchema = {
   additionalProperties: false,
 }
 
-test.only('lists additional properties', t => {
+test('lists additional properties', t => {
   t.plan(3)
 
   const o = {
