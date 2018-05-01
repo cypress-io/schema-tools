@@ -126,9 +126,9 @@ assertSchema(schemas, formats)('person', '1.0.0')(someObject)
 
 ## API
 
-* [documentSchemas](#documentSchemas)
+* [documentSchemas](#documentschemas)
 * [validate](#validate)
-* [assertSchema](#assertSchema)
+* [assertSchema](#assertschema)
 * [SchemaError](#schemaerror)
 
 TODO describe current API
