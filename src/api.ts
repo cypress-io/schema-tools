@@ -31,6 +31,7 @@ import {
   prop,
   map,
   filter,
+  mergeDeepLeft,
 } from 'ramda'
 import stringify from 'json-stable-stringify'
 
@@ -270,43 +271,77 @@ export class SchemaError extends Error {
   }
 }
 
+type ErrorMessageWhiteList = {
+  errors: boolean
+  object: boolean
+  example: boolean
+}
+
+type AssertBySchemaOptions = {
+  substitutions: string[]
+  omit: Partial<ErrorMessageWhiteList>
+}
+
+const AssertBySchemaDefaults: AssertBySchemaOptions = {
+  substitutions: [],
+  omit: {
+    errors: false,
+    object: false,
+    example: false,
+  },
+}
+
 export const assertBySchema = (
   schema: JsonSchema,
   example: PlainObject = {},
-  substitutions: string[] = [],
+  options?: Partial<AssertBySchemaOptions>,
   label?: string,
   formats?: JsonSchemaFormats,
   schemaVersion?: SchemaVersion,
 ) => (object: PlainObject) => {
+  const allOptions = mergeDeepLeft(
+    options || AssertBySchemaDefaults,
+    AssertBySchemaDefaults,
+  )
+
   const replace = () => {
     const cloned = cloneDeep(object)
-    substitutions.forEach(property => {
+    allOptions.substitutions.forEach(property => {
       const value = get(example, property)
       set(cloned, property, value)
     })
     return cloned
   }
 
-  const replaced = substitutions.length ? replace() : object
+  const replaced = allOptions.substitutions.length ? replace() : object
   const result = validateBySchema(schema, formats)(replaced)
   if (result === true) {
     return object
   }
 
   const title = label ? `Schema ${label} violated` : 'Schema violated'
-  const start = [title, '', 'Errors:']
-    .concat(result)
-    .concat(['', 'Current object:'])
-  const objectString = stringify(replaced, { space: '  ' })
-  const exampleString = stringify(example, { space: '  ' })
+  const emptyLine = ''
+  let parts = [title]
 
-  const message =
-    start.join('\n') +
-    '\n' +
-    objectString +
-    '\n\n' +
-    'Expected object like this:\n' +
-    exampleString
+  if (!allOptions.omit.errors) {
+    parts = parts.concat([emptyLine, 'Errors:']).concat(result)
+  }
+
+  if (!allOptions.omit.object) {
+    const objectString = stringify(replaced, { space: '  ' })
+    parts = parts.concat([emptyLine, 'Current object:', objectString])
+  }
+
+  if (!allOptions.omit.example) {
+    const exampleString = stringify(example, { space: '  ' })
+    parts = parts.concat([
+      emptyLine,
+      'Expected object like this:',
+      exampleString,
+    ])
+  }
+
+  const message = parts.join('\n')
 
   throw new SchemaError(
     message,
@@ -338,9 +373,11 @@ export const assertBySchema = (
 export const assertSchema = (
   schemas: SchemaCollection,
   formats?: JsonSchemaFormats,
-) => (name: string, version: string, substitutions: string[] = []) => (
-  object: PlainObject,
-) => {
+) => (
+  name: string,
+  version: string,
+  options?: Partial<AssertBySchemaOptions>,
+) => (object: PlainObject) => {
   const example = getExample(schemas)(name)(version)
   const schema = getObjectSchema(schemas)(name)(version)
   if (!schema) {
@@ -352,7 +389,7 @@ export const assertSchema = (
   return assertBySchema(
     schema.schema,
     example,
-    substitutions,
+    options,
     label,
     formats,
     utils.semverToString(schema.version),

@@ -98,7 +98,7 @@ Now every time you use your schemas, pass the formats too so that the validator 
 
 ```typescript
 // example JSON schema using uuid custom format
-const person100: ObjectSchema = {
+const employee100: ObjectSchema = {
   // has semantic version numbers
   version: {
     major: 1,
@@ -108,7 +108,7 @@ const person100: ObjectSchema = {
   // JSON schema
   schema: {
     type: 'object',
-    title: 'Person',
+    title: 'Employee',
     properties: {
       id: {
         type: 'string',
@@ -120,8 +120,8 @@ const person100: ObjectSchema = {
     id: 'a368dbfd-08e4-4698-b9a3-b2b660a11835',
   },
 }
-// person100 goes into "schemas", then
-assertSchema(schemas, formats)('person', '1.0.0')(someObject)
+// employee100 goes into "schemas", then
+assertSchema(schemas, formats)('Employee', '1.0.0')(someObject)
 ```
 
 ## API
@@ -205,6 +205,36 @@ try {
   console.error(e.message)
   // can also inspect individual fields, see SchemaError
 }
+```
+
+You can substitute some fields from example object to help with dynamic data. For example, to avoid breaking on invalid `id` value, we can tell `assertSchema` to use `id` value from the example object.
+
+```js
+const o = {
+  name: 'Mary',
+  age: -1,
+}
+assertSchema(schemas, formats)('Person', '1.0.0', {
+  substitutions: ['age'],
+})(o)
+// everything is good, because the actual object asserted was
+// {name: 'Mary', age: 10}
+```
+
+You can also limit the error message and omit some properties. Typically the error message with include list of errors, current and example objects, which might create a wall of text. To omit `object` and `example` but leave other fields when forming error message use
+
+```js
+const o = {
+  name: 'Mary',
+  age: -1,
+}
+assertSchema(schemas, formats)('Person', '1.0.0', {
+  omit: {
+    object: true,
+    example: true,
+  },
+})(o)
+// Error message is much much shorter, only "errors" and label will be there
 ```
 
 ### bind

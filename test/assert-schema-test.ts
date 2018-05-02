@@ -83,7 +83,9 @@ test('passing membership invitation 1.0.0 with field substitution', t => {
     age: -1,
   }
   // replace "age" value with value from the example
-  const assert = assertSchema(schemas)('Person', '1.0.0', ['age'])
+  const assert = assertSchema(schemas)('Person', '1.0.0', {
+    substitutions: ['age'],
+  })
   const fn = () => assert(o)
   t.notThrows(fn)
 })
@@ -98,7 +100,10 @@ test('error message has object with substitutions', t => {
   }
   // replace "age" value with value from the example
   // but the "name" does not match schema format
-  const assert = assertSchema(schemas, formats)('Person', '1.0.0', ['age'])
+  const assert = assertSchema(schemas, formats)('Person', '1.0.0', {
+    substitutions: ['age'],
+  })
+
   try {
     assert(o)
   } catch (e) {
@@ -128,5 +133,25 @@ test('lists additional properties', t => {
     assert(o)
   } catch (e) {
     t.deepEqual(e.errors, ['data has additional properties: foo'])
+  }
+})
+
+test('whitelist errors only', t => {
+  t.plan(1)
+
+  const o = {
+    name: 'test',
+    age: -2,
+  }
+  const assert = assertSchema(schemas)('Person', '1.0.0', {
+    omit: {
+      object: true,
+      example: true,
+    },
+  })
+  try {
+    assert(o)
+  } catch (e) {
+    t.snapshot(e.message)
   }
 })
