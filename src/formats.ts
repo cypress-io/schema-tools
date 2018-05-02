@@ -68,7 +68,8 @@ export const getDefaults = (formats: CustomFormats) => {
   Object.keys(formats).forEach(key => {
     const format: CustomFormat = formats[key]
     if (typeof format.defaultValue !== 'undefined') {
-      result[key] = format.defaultValue
+      // store values under name, not under original key
+      result[format.name] = format.defaultValue
     }
   })
   return result
