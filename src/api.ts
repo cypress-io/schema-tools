@@ -311,7 +311,7 @@ export const assertBySchema = (
   throw new SchemaError(
     message,
     result,
-    object,
+    replaced,
     example,
     schema.title,
     schemaVersion,

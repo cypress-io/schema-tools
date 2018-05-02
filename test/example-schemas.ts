@@ -1,6 +1,11 @@
 import { SchemaCollection, VersionedSchema, ObjectSchema } from '../src/objects'
 import { combineSchemas, versionSchemas } from '../src/utils'
-import { CustomFormats, CustomFormat } from '../src'
+import {
+  CustomFormats,
+  CustomFormat,
+  JsonSchemaFormats,
+  detectors,
+} from '../src'
 
 const name: CustomFormat = {
   name: 'name',
@@ -52,3 +57,5 @@ const personVersions: VersionedSchema = versionSchemas(person100)
 
 // combines "Person" versions with other schemas if any
 export const schemas: SchemaCollection = combineSchemas(personVersions)
+
+export const formats: JsonSchemaFormats = detectors(exampleFormats)

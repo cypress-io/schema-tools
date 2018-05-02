@@ -1,6 +1,6 @@
 import test from 'ava'
 import { assertSchema } from '../src'
-import { schemas } from './example-schemas'
+import { schemas, formats } from './example-schemas'
 
 const assertExample100 = assertSchema(schemas)('Person', '1.0.0')
 
@@ -86,6 +86,32 @@ test('passing membership invitation 1.0.0 with field substitution', t => {
   const assert = assertSchema(schemas)('Person', '1.0.0', ['age'])
   const fn = () => assert(o)
   t.notThrows(fn)
+})
+
+test('error message has object with substitutions', t => {
+  t.plan(3)
+
+  // notice invalid "age" value and invalid "name"
+  const o = {
+    name: 'lowercase',
+    age: -1,
+  }
+  // replace "age" value with value from the example
+  // but the "name" does not match schema format
+  const assert = assertSchema(schemas, formats)('Person', '1.0.0', ['age'])
+  try {
+    assert(o)
+  } catch (e) {
+    // because we told assertSchema to substitute ["age"], it will grab
+    // the age value from the example object for this schema
+    const oWithSubstitutions = {
+      name: 'lowercase',
+      age: e.example.age,
+    }
+    t.deepEqual(e.object, oWithSubstitutions, 'object with replaced values')
+    t.snapshot(e.message, 'error message')
+    t.snapshot(e.errors, 'list of errors')
+  }
 })
 
 test('lists additional properties', t => {
