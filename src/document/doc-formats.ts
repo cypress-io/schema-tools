@@ -20,6 +20,7 @@ export const documentCustomFormats = (formats: CustomFormats) => {
   ]
   const rows = Object.keys(formats).map(name => {
     const format = formats[name]
+    const formatName = format.name
     const r = format.detect.toString()
     const escaped = escapedCode(r)
     const dynamic = 'defaultValue' in format ? checkMark : emptyMark
@@ -33,7 +34,7 @@ export const documentCustomFormats = (formats: CustomFormats) => {
         : emptyMark
 
     return {
-      name,
+      name: formatName,
       'regular expression': escaped,
       dynamic,
       default: defaultValue,

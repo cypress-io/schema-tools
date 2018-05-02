@@ -122,7 +122,8 @@ test('JSON schema object to Markdown', t => {
 test('custom formats', t => {
   const formats: CustomFormats = {
     foo: {
-      name: 'foo',
+      // should use name in the documentation
+      name: 'my-foo',
       description: 'example custom format foo',
       detect: /^foo$/,
     },
