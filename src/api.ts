@@ -142,10 +142,11 @@ const errorsToStrings = (errors: ValidationError[]): string[] =>
 export const validateBySchema = (
   schema: JsonSchema,
   formats?: JsonSchemaFormats,
+  greedy: boolean = false,
 ) => (object: object): true | string[] => {
   // TODO this could be cached, or even be part of the loaded module
   // when validating use our additional formats, like "uuid"
-  const validate = validator(schema, { formats })
+  const validate = validator(schema, { formats, greedy })
   if (validate(object)) {
     return true
   }

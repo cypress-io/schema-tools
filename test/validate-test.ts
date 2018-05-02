@@ -91,3 +91,25 @@ test('shows error for wrong type', t => {
   }
   t.snapshot(validateBySchema(schema)(o))
 })
+
+test('greedy validation', t => {
+  t.plan(3)
+
+  // several things wrong
+  // 1. missing property
+  // 2. invalid property format
+  // 3. additional properties
+  const o = {
+    name: 42,
+    hook: 'h1',
+    foo: 1,
+    bar: 2,
+  }
+  const greedy = true
+  const result = validateBySchema(schema, undefined, greedy)(o)
+  t.true(Array.isArray(result))
+  if (Array.isArray(result)) {
+    t.is(result.length, 3, 'gets all errors')
+    t.snapshot(result)
+  }
+})
