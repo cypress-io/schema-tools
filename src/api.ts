@@ -7,7 +7,14 @@ import {
 } from './objects'
 
 import * as utils from './utils'
-import { JsonSchemaFormats } from './formats'
+import {
+  JsonSchemaFormats,
+  CustomFormats,
+  detectors,
+  getDefaults,
+  FormatDefaults,
+} from './formats'
+import { sanitize } from './sanitize'
 import debugApi from 'debug'
 import validator from '@bahmutov/is-my-json-valid'
 import cloneDeep from 'lodash.clonedeep'
@@ -339,4 +346,31 @@ export const assertSchema = (
     formats,
     utils.semverToString(schema.version),
   )(object)
+}
+
+type BindOptions = {
+  schemas: SchemaCollection
+  formats?: CustomFormats
+}
+
+/**
+ * Given schemas and formats creates "mini" API bound to the these schemas.
+ */
+export const bind = (options: BindOptions) => {
+  const formatDetectors: JsonSchemaFormats | undefined = options.formats
+    ? detectors(options.formats)
+    : undefined
+
+  const defaults: FormatDefaults | undefined = options.formats
+    ? getDefaults(options.formats)
+    : undefined
+
+  const api = {
+    assertSchema: assertSchema(options.schemas, formatDetectors),
+    schemaNames: schemaNames(options.schemas),
+    getExample: getExample(options.schemas),
+    sanitize: sanitize(options.schemas, defaults),
+    validate: validate(options.schemas),
+  }
+  return api
 }

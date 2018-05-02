@@ -112,13 +112,13 @@ const person100: ObjectSchema = {
     properties: {
       id: {
         type: 'string',
-        format: 'uuid'
-      }
-    }
+        format: 'uuid',
+      },
+    },
   },
   example: {
-    id: 'a368dbfd-08e4-4698-b9a3-b2b660a11835'
-  }
+    id: 'a368dbfd-08e4-4698-b9a3-b2b660a11835',
+  },
 }
 // person100 goes into "schemas", then
 assertSchema(schemas, formats)('person', '1.0.0')(someObject)
@@ -205,6 +205,18 @@ try {
   console.error(e.message)
   // can also inspect individual fields, see SchemaError
 }
+```
+
+### bind
+
+There are multiple methods to validate, assert or sanitize an object against a schema. All take schemas and (optional) formats. But a project using schema tools probably has a single collection of schemas that it wants to use again and again. The `bind` method makes it easy to bind the first argument in each function to a schema collection and just call methods with an object later.
+
+```js
+import { schemas } from './my-schemas'
+import { formats } from './my-formats'
+import { bind } from '@cypress/schema-tools'
+const api = bind({ schemas, formats })
+api.assertSchema('name', '1.0.0')(someObject)
 ```
 
 ### SchemaError
