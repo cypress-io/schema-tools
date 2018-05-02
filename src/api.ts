@@ -142,7 +142,7 @@ const errorsToStrings = (errors: ValidationError[]): string[] =>
 export const validateBySchema = (
   schema: JsonSchema,
   formats?: JsonSchemaFormats,
-  greedy: boolean = false,
+  greedy: boolean = true,
 ) => (object: object): true | string[] => {
   // TODO this could be cached, or even be part of the loaded module
   // when validating use our additional formats, like "uuid"
@@ -184,6 +184,7 @@ export const validateBySchema = (
 export const validate = (
   schemas: SchemaCollection,
   formats?: JsonSchemaFormats,
+  greedy: boolean = true,
 ) => (schemaName: string, version: string) => (
   object: object,
 ): true | string[] => {
@@ -201,7 +202,7 @@ export const validate = (
 
   // TODO this could be cached, or even be part of the loaded module
   // when validating use our additional formats, like "uuid"
-  return validateBySchema(aSchema.schema, formats)(object)
+  return validateBySchema(aSchema.schema, formats, greedy)(object)
 }
 
 /**
@@ -279,11 +280,13 @@ type ErrorMessageWhiteList = {
 }
 
 type AssertBySchemaOptions = {
+  greedy: boolean
   substitutions: string[]
   omit: Partial<ErrorMessageWhiteList>
 }
 
 const AssertBySchemaDefaults: AssertBySchemaOptions = {
+  greedy: true,
   substitutions: [],
   omit: {
     errors: false,
@@ -315,7 +318,7 @@ export const assertBySchema = (
   }
 
   const replaced = allOptions.substitutions.length ? replace() : object
-  const result = validateBySchema(schema, formats)(replaced)
+  const result = validateBySchema(schema, formats, allOptions.greedy)(replaced)
   if (result === true) {
     return object
   }

@@ -194,6 +194,12 @@ data.createdAt is required
 data.createdAt must be date-time format
 ```
 
+To stop after finding initial set of errors, pass `greedy = false` flag
+
+```js
+const validatePerson100 = validate(schemas, formats, false)('person', '1.0.0')
+```
+
 ### assertSchema
 
 Checks a given object against schemas (and formats) and throws a [SchemaError](#schemaerror) if the object violates the given schema.
@@ -235,6 +241,12 @@ assertSchema(schemas, formats)('Person', '1.0.0', {
   },
 })(o)
 // Error message is much much shorter, only "errors" and label will be there
+```
+
+By default the json schema check is [greedy](https://github.com/mafintosh/is-my-json-valid#greedy-mode-tries-to-validate-as-much-as-possible) but you can limit it via an option
+
+```js
+assertSchema(schemas, formats)('Person', '1.0.0', { greedy: false })
 ```
 
 ### bind
