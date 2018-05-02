@@ -219,6 +219,8 @@ const api = bind({ schemas, formats })
 api.assertSchema('name', '1.0.0')(someObject)
 ```
 
+See [test/bind-test.ts](test/bind-test.ts) for examples
+
 ### SchemaError
 
 When asserting an object against a schema a custom error is thrown. It is an instance of `Error`, with a very detailed message. It also has additional properties.

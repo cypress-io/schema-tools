@@ -20,7 +20,18 @@ import validator from '@bahmutov/is-my-json-valid'
 import cloneDeep from 'lodash.clonedeep'
 import set from 'lodash.set'
 import get from 'lodash.get'
-import { uniq, find, whereEq, difference, keys, uniqBy } from 'ramda'
+import {
+  uniq,
+  find,
+  whereEq,
+  difference,
+  keys,
+  uniqBy,
+  mergeAll,
+  prop,
+  map,
+  filter,
+} from 'ramda'
 import stringify from 'json-stable-stringify'
 
 const debug = debugApi('schema-tools')
@@ -353,24 +364,38 @@ type BindOptions = {
   formats?: CustomFormats
 }
 
+const mergeSchemas = (schemas: SchemaCollection[]): SchemaCollection =>
+  mergeAll(schemas)
+
+const mergeFormats = (formats: CustomFormats[]): CustomFormats =>
+  mergeAll(formats)
+
+const exists = x => Boolean(x)
+
 /**
  * Given schemas and formats creates "mini" API bound to the these schemas.
+ * Can take multiple schemas and merged them all, and merges formats.
  */
-export const bind = (options: BindOptions) => {
-  const formatDetectors: JsonSchemaFormats | undefined = options.formats
-    ? detectors(options.formats)
-    : undefined
+export const bind = (...options: BindOptions[]) => {
+  const allSchemas: SchemaCollection[] = map(prop('schemas'), options)
+  const schemas = mergeSchemas(allSchemas)
 
-  const defaults: FormatDefaults | undefined = options.formats
-    ? getDefaults(options.formats)
-    : undefined
+  const allFormats: CustomFormats[] = filter(
+    exists,
+    map(prop('formats'), options),
+  )
+  const formats = mergeFormats(allFormats)
+
+  const formatDetectors = detectors(formats)
+
+  const defaults: FormatDefaults = getDefaults(formats)
 
   const api = {
-    assertSchema: assertSchema(options.schemas, formatDetectors),
-    schemaNames: schemaNames(options.schemas),
-    getExample: getExample(options.schemas),
-    sanitize: sanitize(options.schemas, defaults),
-    validate: validate(options.schemas),
+    assertSchema: assertSchema(schemas, formatDetectors),
+    schemaNames: schemaNames(schemas),
+    getExample: getExample(schemas),
+    sanitize: sanitize(schemas, defaults),
+    validate: validate(schemas),
   }
   return api
 }
