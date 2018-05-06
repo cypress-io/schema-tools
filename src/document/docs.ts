@@ -1,23 +1,21 @@
 // generates Markdown document with all schema information
 
-import {
-  schemaNames,
-  normalizeName,
-  getSchemaVersions,
-  getObjectSchema,
-  getExample,
-} from '..'
-import { ObjectSchema } from '../objects'
-import { documentSchema } from './utils'
-import { documentCustomFormats } from './doc-formats'
-
-import json2md from 'json2md'
 import stringify from 'json-stable-stringify'
-import { flatten, toLower } from 'ramda'
-import { SchemaCollection } from '../objects'
-import { CustomFormats } from '../formats'
+import json2md from 'json2md'
 import la from 'lazy-ass'
 import quote from 'quote'
+import { flatten, toLower } from 'ramda'
+import {
+  getExample,
+  getObjectSchema,
+  getSchemaVersions,
+  normalizeName,
+  schemaNames,
+} from '..'
+import { CustomFormats } from '../formats'
+import { ObjectSchema, SchemaCollection } from '../objects'
+import { documentCustomFormats } from './doc-formats'
+import { documentSchema } from './utils'
 
 const ticks = quote({ quotes: '`' })
 const title = [{ h1: 'Schemas' }]

@@ -1,6 +1,6 @@
-import { CustomFormats } from '../formats'
-import { findUsedColumns, checkMark, emptyMark } from './utils'
 import quote from 'quote'
+import { CustomFormats } from '../formats'
+import { checkMark, emptyMark, findUsedColumns } from './utils'
 
 const ticks = quote({ quotes: '`' })
 

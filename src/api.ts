@@ -1,39 +1,38 @@
+import validator from '@bahmutov/is-my-json-valid'
+import debugApi from 'debug'
+import stringify from 'json-stable-stringify'
+import cloneDeep from 'lodash.clonedeep'
+import get from 'lodash.get'
+import set from 'lodash.set'
 import {
-  ObjectSchema,
-  SchemaCollection,
-  SchemaVersion,
-  PlainObject,
-  JsonSchema,
-} from './objects'
-
-import * as utils from './utils'
+  difference,
+  filter,
+  find,
+  keys,
+  map,
+  mergeAll,
+  mergeDeepLeft,
+  prop,
+  uniq,
+  uniqBy,
+  whereEq,
+} from 'ramda'
 import {
-  JsonSchemaFormats,
   CustomFormats,
+  FormatDefaults,
+  JsonSchemaFormats,
   detectors,
   getDefaults,
-  FormatDefaults,
 } from './formats'
-import { sanitize } from './sanitize'
-import debugApi from 'debug'
-import validator from '@bahmutov/is-my-json-valid'
-import cloneDeep from 'lodash.clonedeep'
-import set from 'lodash.set'
-import get from 'lodash.get'
 import {
-  uniq,
-  find,
-  whereEq,
-  difference,
-  keys,
-  uniqBy,
-  mergeAll,
-  prop,
-  map,
-  filter,
-  mergeDeepLeft,
-} from 'ramda'
-import stringify from 'json-stable-stringify'
+  JsonSchema,
+  ObjectSchema,
+  PlainObject,
+  SchemaCollection,
+  SchemaVersion,
+} from './objects'
+import { sanitize } from './sanitize'
+import * as utils from './utils'
 
 const debug = debugApi('schema-tools')
 

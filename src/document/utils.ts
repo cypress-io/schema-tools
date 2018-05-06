@@ -1,8 +1,8 @@
-import { JsonSchema, JsonProperties, SchemaCollection } from '../objects'
-import { schemaNames, normalizeName } from '..'
-import { CustomFormats } from '../formats'
-import { toLower, find } from 'ramda'
 import quote from 'quote'
+import { find, toLower } from 'ramda'
+import { normalizeName, schemaNames } from '..'
+import { CustomFormats } from '../formats'
+import { JsonProperties, JsonSchema, SchemaCollection } from '../objects'
 
 const ticks = quote({ quotes: '`' })
 
