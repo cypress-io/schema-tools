@@ -273,6 +273,10 @@ When asserting an object against a schema a custom error is thrown. It is an ins
 * `schemaName` is the title of the schema, like `Person`
 * `schemaVersion` the version like `1.0.0` of the schema violated, if known.
 
+## Debugging
+
+To see log messages from this module, run with `DEBUG=schema-tools`
+
 ## Testing
 
 Uses [ava-ts](https://github.com/andywer/ava-ts#readme) to run Ava test runner directly against TypeScript test files. Use `npm t` to build and test everything in the `test` folder.

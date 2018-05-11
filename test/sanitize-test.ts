@@ -1,9 +1,9 @@
 import test from 'ava'
-import { sanitize, sanitizeBySchema } from '../src/sanitize'
-import { schemas, exampleFormats } from './example-schemas'
 import stringify from 'json-stable-stringify'
-import { JsonSchema } from '../src/objects'
 import { getDefaults } from '../src/formats'
+import { JsonSchema } from '../src/objects'
+import { sanitize, sanitizeBySchema } from '../src/sanitize'
+import { exampleFormats, schemas } from './example-schemas'
 
 const schemaName = 'person'
 const schemaVersion = '1.0.0'
@@ -33,33 +33,160 @@ test('sanitize with default values', t => {
   })
 })
 
-const schema: JsonSchema = {
-  title: 'TestSchema',
-  type: 'object',
-  properties: {
-    createdAt: {
-      type: 'string',
-      format: 'date-time',
-    },
-    name: {
-      type: 'string',
-    },
-    hook: {
-      type: 'string',
-      format: 'hookId',
-    },
-    ids: {
-      type: 'array',
-      items: {
+test('sanitize empty object using schema', t => {
+  const schema: JsonSchema = {
+    title: 'TestSchema',
+    type: 'object',
+    properties: {
+      createdAt: {
         type: 'string',
-        format: 'uuid',
+        format: 'date-time',
+      },
+      name: {
+        type: 'string',
+      },
+      hook: {
+        type: 'string',
+        format: 'hookId',
+      },
+      ids: {
+        type: 'array',
+        items: {
+          type: 'string',
+          format: 'uuid',
+        },
       },
     },
-  },
-}
+  }
 
-test('sanitize empty object using schema', t => {
   const o = {}
-  const result = sanitizeBySchema(schema)(o)
+  const result = sanitizeBySchema(schema, formatDefaults)(o)
   t.deepEqual(result, {})
+})
+
+test('sanitize string array', t => {
+  t.plan(1)
+  const schema: JsonSchema = {
+    title: 'TestSchema',
+    type: 'object',
+    properties: {
+      names: {
+        type: 'array',
+        items: {
+          type: 'string',
+          format: 'name',
+        },
+      },
+    },
+  }
+
+  const o = {
+    names: ['Joe', 'Mary'],
+  }
+  const result = sanitizeBySchema(schema, formatDefaults)(o)
+  t.deepEqual(
+    result,
+    { names: ['Buddy', 'Buddy'] },
+    'both names were replaced with default value for the format',
+  )
+})
+
+test('sanitize array', t => {
+  const schema: JsonSchema = {
+    title: 'TestSchema',
+    type: 'object',
+    properties: {
+      names: {
+        type: 'array',
+        items: {
+          // requires "title" in order to be considered a schema
+          title: 'Name',
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              format: 'name',
+            },
+          },
+        },
+      },
+    },
+  }
+
+  const o = {
+    names: [
+      {
+        name: 'Joe',
+      },
+      {
+        name: 'Mary',
+      },
+    ],
+  }
+  const result = sanitizeBySchema(schema, formatDefaults)(o)
+  t.deepEqual(
+    result,
+    {
+      names: [
+        {
+          name: 'Buddy',
+        },
+        {
+          name: 'Buddy',
+        },
+      ],
+    },
+    'name in each object is sanitized',
+  )
+})
+
+test('sanitize array that can be null', t => {
+  const schema: JsonSchema = {
+    title: 'TestSchema',
+    type: 'object',
+    properties: {
+      names: {
+        // notice that names can be "null"
+        // https://github.com/cypress-io/schema-tools/issues/53
+        type: ['array', 'null'],
+        items: {
+          // requires "title" in order to be considered a schema
+          title: 'Name',
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+              format: 'name',
+            },
+          },
+        },
+      },
+    },
+  }
+
+  const o = {
+    names: [
+      {
+        name: 'Joe',
+      },
+      {
+        name: 'Mary',
+      },
+    ],
+  }
+  const result = sanitizeBySchema(schema, formatDefaults)(o)
+  t.deepEqual(
+    result,
+    {
+      names: [
+        {
+          name: 'Buddy',
+        },
+        {
+          name: 'Buddy',
+        },
+      ],
+    },
+    'name in each object is sanitized',
+  )
 })

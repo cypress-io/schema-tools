@@ -1,7 +1,10 @@
-import { PlainObject, JsonSchema, SchemaCollection } from './objects'
-import { assertSchema, getObjectSchema } from './api'
+import debugApi from 'debug'
 import { clone } from 'ramda'
+import { assertSchema, getObjectSchema } from './api'
 import { FormatDefaults } from './formats'
+import { JsonSchema, PlainObject, SchemaCollection } from './objects'
+
+const debug = debugApi('schema-tools')
 
 export const isDynamicFormat = (formatDefaults: FormatDefaults | undefined) => (
   format: string,
@@ -12,7 +15,10 @@ const isString = s => typeof s === 'string'
 const canPropertyBeString = type =>
   type === 'string' || (Array.isArray(type) && type.includes('string'))
 
-const isArrayType = prop => prop.type === 'array' && prop.items
+const canPropertyBeArray = type =>
+  type === 'array' || (Array.isArray(type) && type.includes('array'))
+
+const isArrayType = prop => canPropertyBeArray(prop.type) && prop.items
 
 const isStringArray = prop =>
   isArrayType(prop) && canPropertyBeString(prop.items.type)
@@ -45,16 +51,26 @@ export const sanitizeBySchema = (
       }
 
       const prop = props[key]
+      debug('looking at property %j', prop)
 
       if (key in object && Array.isArray(object[key])) {
+        debug('%s is present as an array', key)
+
         if (isStringArray(prop)) {
+          debug('%s is a string array', key)
           // go through the items in the array and if the format is dynamic
           // set default values
           const list: string[] = result[key] as string[]
 
           if (prop.items && prop.items.format) {
             const itemFormat = prop.items.format
+            debug('items format %s', itemFormat)
+
             if (formatDefaults && isDynamic(itemFormat)) {
+              debug(
+                'format %s is dynamic, need to replace with default value',
+                itemFormat,
+              )
               const defaultValue = formatDefaults[itemFormat]
               for (let k = 0; k < list.length; k += 1) {
                 list[k] = defaultValue as string
@@ -63,6 +79,8 @@ export const sanitizeBySchema = (
             }
           }
         } else if (isArrayType(prop) && hasPropertiesArray(prop)) {
+          debug('property %s is array-like and has properties', key)
+
           const list: PlainObject[] = object[key] as PlainObject[]
           const propSchema: JsonSchema = prop.items as JsonSchema
           result[key] = list.map(sanitizeBySchema(propSchema, formatDefaults))
