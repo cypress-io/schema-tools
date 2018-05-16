@@ -37,3 +37,7 @@ test('custom format', t => {
   const result = formatToMarkdown(undefined, exampleFormats)(value)
   t.is(result, '[name](#formats)', 'points at the custom formats section')
 })
+
+test.only('schema pointing at another schema', t => {
+  t.true('person' in schemas, 'there is a schema named "person"')
+})
