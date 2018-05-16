@@ -44,7 +44,7 @@ export function documentSchemas(
       ) as ObjectSchema
       la(schema, 'cannot find schema', schemaName, version)
 
-      const schemaDoc = documentSchema(schema.schema)
+      const schemaDoc = documentSchema(schema.schema, schemas, formats)
 
       const start: any[] = [{ h3: `${schemaName}@${version}` }]
       if (schema.package) {

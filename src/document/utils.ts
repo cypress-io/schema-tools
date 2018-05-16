@@ -2,7 +2,12 @@ import quote from 'quote'
 import { find, toLower } from 'ramda'
 import { normalizeName, schemaNames } from '..'
 import { CustomFormats } from '../formats'
-import { JsonProperties, JsonSchema, SchemaCollection } from '../objects'
+import {
+  JsonProperties,
+  JsonProperty,
+  JsonSchema,
+  SchemaCollection,
+} from '../objects'
 
 const ticks = quote({ quotes: '`' })
 
@@ -30,10 +35,13 @@ export const enumToMarkdown = enumeration => {
   return ticks(enumeration.map(JSON.stringify).join(', '))
 }
 
-export const formatToMarkdown = value => {
+export const formatToMarkdown = (
+  schemas?: SchemaCollection,
+  formats?: CustomFormats,
+) => (value: JsonProperty) => {
   if (!value.format) {
     if (value.see) {
-      return isSchemaName(value.see)
+      return schemas && isSchemaName(schemas)(value.see)
         ? `[${value.see}](#${toLower(normalizeName(value.see))})`
         : ticks(value.see)
     } else {
@@ -41,7 +49,7 @@ export const formatToMarkdown = value => {
     }
   }
 
-  if (isCustomFormat(value.format)) {
+  if (formats && isCustomFormat(formats)(value.format)) {
     return `[${value.format}](#formats)`
   }
 
@@ -66,6 +74,8 @@ type PropertyDescription = {
 export const documentProperties = (
   properties: JsonProperties,
   required: string[] = [],
+  schemas?: SchemaCollection,
+  formats?: CustomFormats,
 ): PropertyDescription[] => {
   const isRequired = name => required.indexOf(name) !== -1
   const typeText = type => (Array.isArray(type) ? type.join(' or ') : type)
@@ -73,25 +83,31 @@ export const documentProperties = (
   return Object.keys(properties)
     .sort()
     .map(prop => {
-      const value = properties[prop]
+      const value: JsonProperty = properties[prop]
       return {
         name: ticks(prop),
         type: typeText(value.type),
         required: isRequired(prop) ? checkMark : emptyMark,
-        format: formatToMarkdown(value),
+        format: formatToMarkdown(schemas, formats)(value),
         enum: enumToMarkdown(value.enum),
         description: value.description ? value.description : emptyMark,
       }
     })
 }
 
-export const documentSchema = (schema: JsonSchema) => {
+export const documentSchema = (
+  schema: JsonSchema,
+  schemas?: SchemaCollection,
+  formats?: CustomFormats,
+) => {
   const properties = schema.properties
 
   if (properties) {
     const rows: PropertyDescription[] = documentProperties(
       properties,
       schema.required,
+      schemas,
+      formats,
     )
     const headers = [
       'name',

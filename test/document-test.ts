@@ -1,23 +1,26 @@
 import test from 'ava'
 import json2md from 'json2md'
+import { clone } from 'ramda'
+import { documentSchemas, setPackageName } from '../src'
+import { documentCustomFormats } from '../src/document/doc-formats'
 import {
+  documentProperties,
   documentSchema,
   findUsedColumns,
-  documentProperties,
 } from '../src/document/utils'
-import { documentCustomFormats } from '../src/document/doc-formats'
-import { JsonSchema, JsonProperties } from '../src/objects'
 import { CustomFormats } from '../src/formats'
-import { schemas, exampleFormats } from './example-schemas'
-import { documentSchemas, setPackageName } from '../src'
-import { clone } from 'ramda'
+import { JsonProperties, JsonSchema } from '../src/objects'
+import { exampleFormats, schemas } from './example-schemas'
 
 test('documents just schemas', t => {
+  // without schemas and formats, the output document
+  // just has the custom format by name
   const markdown = documentSchemas(schemas)
   t.snapshot(markdown)
 })
 
 test('documents schemas and custom formats', t => {
+  // with schemas and custom formats it can link to the formats section
   const markdown = documentSchemas(schemas, exampleFormats)
   t.snapshot(markdown)
 })
