@@ -27,3 +27,13 @@ test('date-time format', t => {
   const result = formatToMarkdown(undefined, undefined)(value)
   t.is(result, '`date-time`')
 })
+
+test('custom format', t => {
+  t.true('name' in exampleFormats, 'there is custom format "name"')
+  const value: JsonProperty = {
+    type: 'string',
+    format: 'name',
+  }
+  const result = formatToMarkdown(undefined, exampleFormats)(value)
+  t.is(result, '[name](#formats)', 'points at the custom formats section')
+})
