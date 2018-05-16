@@ -19,7 +19,7 @@ export const exampleFormats: CustomFormats = {
 }
 
 // individual schema describing "Person" v1.0.0
-const person100: ObjectSchema = {
+export const person100: ObjectSchema = {
   version: {
     major: 1,
     minor: 0,
@@ -67,7 +67,7 @@ const team100: ObjectSchema = {
         items: {
           ...person100.schema,
         },
-        see: person100.schema.title,
+        see: person100,
       },
     },
   },

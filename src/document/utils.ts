@@ -1,11 +1,12 @@
 import quote from 'quote'
 import { find, toLower } from 'ramda'
-import { normalizeName, schemaNames } from '..'
+import { normalizeName, schemaNames, semverToString } from '..'
 import { CustomFormats } from '../formats'
 import {
   JsonProperties,
   JsonProperty,
   JsonSchema,
+  ObjectSchema,
   SchemaCollection,
 } from '../objects'
 
@@ -28,6 +29,16 @@ const knownSchemaNames = (schemas: SchemaCollection) => schemaNames(schemas)
 const isSchemaName = (schemas: SchemaCollection) => (s: string) =>
   knownSchemaNames(schemas).includes(normalizeName(s))
 
+// removes all characters to have a link
+export const anchor = (s: string) => toLower(s.replace(/[\.@]/g, ''))
+
+export const anchorForSchema = (s: ObjectSchema): string => {
+  const schemaName = toLower(normalizeName(s.schema.title))
+  const seeVersion = semverToString(s.version)
+  const nameAndVersion = `${schemaName}@${seeVersion}`
+  return anchor(nameAndVersion)
+}
+
 export const enumToMarkdown = enumeration => {
   if (!enumeration) {
     return emptyMark
@@ -38,18 +49,31 @@ export const enumToMarkdown = enumeration => {
 export const formatToMarkdown = (
   schemas?: SchemaCollection,
   formats?: CustomFormats,
-) => (value: JsonProperty) => {
+) => (value: JsonProperty): string => {
   if (!value.format) {
     if (value.see) {
-      return schemas && isSchemaName(schemas)(value.see)
-        ? `[${value.see}](#${toLower(normalizeName(value.see))})`
-        : ticks(value.see)
+      if (typeof value.see === 'string') {
+        // try finding schema by name
+        return schemas && isSchemaName(schemas)(value.see)
+          ? `[${value.see}](#${toLower(normalizeName(value.see))})`
+          : ticks(value.see)
+      } else {
+        const seeSchema: ObjectSchema = value.see
+        const schemaName = `${seeSchema.schema.title}`
+        const seeVersion = semverToString(seeSchema.version)
+        const nameAndVersion = `${schemaName}@${seeVersion}`
+        const seeAnchor = anchorForSchema(seeSchema)
+        return schemas && isSchemaName(schemas)(schemaName)
+          ? `[${nameAndVersion}](#${seeAnchor})`
+          : ticks(nameAndVersion)
+      }
     } else {
       return emptyMark
     }
   }
 
   if (formats && isCustomFormat(formats)(value.format)) {
+    // point at the formats section
     return `[${value.format}](#formats)`
   }
 

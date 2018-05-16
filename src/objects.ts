@@ -45,7 +45,7 @@ export type JsonProperty = {
   required?: boolean | string[]
   properties?: JsonProperties
   items?: JsonProperty
-  see?: string
+  see?: string | ObjectSchema
   title?: string
   patternProperties?: object
   additionalProperties?: boolean

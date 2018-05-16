@@ -4,7 +4,7 @@ import stringify from 'json-stable-stringify'
 import json2md from 'json2md'
 import la from 'lazy-ass'
 import quote from 'quote'
-import { flatten, toLower } from 'ramda'
+import { flatten } from 'ramda'
 import {
   getExample,
   getObjectSchema,
@@ -15,7 +15,7 @@ import {
 import { CustomFormats } from '../formats'
 import { ObjectSchema, SchemaCollection } from '../objects'
 import { documentCustomFormats } from './doc-formats'
-import { documentSchema } from './utils'
+import { anchor, documentSchema } from './utils'
 
 const ticks = quote({ quotes: '`' })
 const title = [{ h1: 'Schemas' }]
@@ -77,8 +77,6 @@ export function documentSchemas(
   }
 
   const fragments = flatten(schemaNames(schemas).map(toDoc))
-
-  const anchor = (s: string) => toLower(s.replace(/[\.@]/g, ''))
 
   const schemaNameToTopLevelLink = (schemaName: string) =>
     `[${schemaName}](#${anchor(schemaName)})`
