@@ -41,6 +41,7 @@ const person100: ObjectSchema = {
       },
     },
     required: ['name', 'age'],
+    // note: you can just use required: true to require all properties
   },
   // has typical example
   example: {
