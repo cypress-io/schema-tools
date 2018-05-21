@@ -1,6 +1,14 @@
 import test from 'ava'
-import { assertSchema } from '../src'
-import { schemas, formats } from './example-schemas'
+import {
+  JsonSchema,
+  ObjectSchema,
+  SchemaCollection,
+  VersionedSchema,
+  assertSchema,
+  combineSchemas,
+  versionSchemas,
+} from '../src'
+import { formats, schemas } from './example-schemas'
 
 const assertExample100 = assertSchema(schemas)('Person', '1.0.0')
 
@@ -149,6 +157,44 @@ test('whitelist errors only', t => {
       example: true,
     },
   })
+  try {
+    assert(o)
+  } catch (e) {
+    t.snapshot(e.message)
+  }
+})
+
+test('require all properties', t => {
+  t.plan(1)
+  const schema: JsonSchema = {
+    title: 'Example',
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+      },
+      bar: {
+        type: 'number',
+      },
+    },
+    required: true,
+    additionalProperties: false,
+  }
+  const schema100: ObjectSchema = {
+    version: {
+      major: 1,
+      minor: 0,
+      patch: 0,
+    },
+    schema,
+    example: {
+      foo: 'foo',
+    },
+  }
+  const schemaVersions: VersionedSchema = versionSchemas(schema100)
+  const schemas: SchemaCollection = combineSchemas(schemaVersions)
+  const assert = assertSchema(schemas)('Example', '1.0.0')
+  const o = {}
   try {
     assert(o)
   } catch (e) {

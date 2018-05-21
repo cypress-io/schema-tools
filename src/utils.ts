@@ -1,15 +1,15 @@
-import {
-  Semver,
-  ObjectSchema,
-  JsonPropertyTypes,
-  VersionedSchema,
-  SchemaCollection,
-  SchemaVersion,
-} from './objects'
+import la from 'lazy-ass'
 import camelCase from 'lodash.camelcase'
 import cloneDeep from 'lodash.clonedeep'
-import la from 'lazy-ass'
 import { map, path, uniq } from 'ramda'
+import {
+  JsonPropertyTypes,
+  ObjectSchema,
+  SchemaCollection,
+  SchemaVersion,
+  Semver,
+  VersionedSchema,
+} from './objects'
 
 /**
  * converts semantic version object into a string.
@@ -38,6 +38,13 @@ export const versionSchemas = (...schemas: ObjectSchema[]) => {
 
   const result: VersionedSchema = {}
   schemas.forEach(s => {
+    if (s.schema.required === true) {
+      if (s.schema.properties) {
+        s.schema.required = Object.keys(s.schema.properties)
+      } else {
+        s.schema.required = []
+      }
+    }
     const version = semverToString(s.version)
     result[version] = s
   })
@@ -116,7 +123,9 @@ export const addProperty = (
     if (!newSchema.schema.required) {
       newSchema.schema.required = []
     }
-    newSchema.schema.required.push(property)
+    if (Array.isArray(newSchema.schema.required)) {
+      newSchema.schema.required.push(property)
+    }
   }
 
   if (propertyDescription) {

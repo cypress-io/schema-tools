@@ -97,11 +97,14 @@ type PropertyDescription = {
 
 export const documentProperties = (
   properties: JsonProperties,
-  required: string[] = [],
+  required: string[] | true = [],
   schemas?: SchemaCollection,
   formats?: CustomFormats,
 ): PropertyDescription[] => {
-  const isRequired = name => required.indexOf(name) !== -1
+  const requiredProperties: string[] = Array.isArray(required)
+    ? required
+    : Object.keys(properties)
+  const isRequired = name => requiredProperties.indexOf(name) !== -1
   const typeText = type => (Array.isArray(type) ? type.join(' or ') : type)
 
   return Object.keys(properties)
