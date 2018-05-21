@@ -37,6 +37,7 @@ test('sanitize empty object using schema', t => {
   const schema: JsonSchema = {
     title: 'TestSchema',
     type: 'object',
+    additionalProperties: false,
     properties: {
       createdAt: {
         type: 'string',
@@ -69,6 +70,7 @@ test('sanitize string array', t => {
   const schema: JsonSchema = {
     title: 'TestSchema',
     type: 'object',
+    additionalProperties: false,
     properties: {
       names: {
         type: 'array',
@@ -95,6 +97,7 @@ test('sanitize array', t => {
   const schema: JsonSchema = {
     title: 'TestSchema',
     type: 'object',
+    additionalProperties: false,
     properties: {
       names: {
         type: 'array',
@@ -144,6 +147,7 @@ test('sanitize array that can be null', t => {
   const schema: JsonSchema = {
     title: 'TestSchema',
     type: 'object',
+    additionalProperties: false,
     properties: {
       names: {
         // notice that names can be "null"

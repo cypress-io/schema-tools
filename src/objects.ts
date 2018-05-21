@@ -66,7 +66,7 @@ export type JsonSchema = {
   // which properties are MUST have
   required?: string[]
   // does the schema allow unknown properties?
-  additionalProperties?: boolean
+  additionalProperties: boolean
 }
 
 export type ObjectSchema = {

@@ -70,6 +70,7 @@ const team100: ObjectSchema = {
         see: person100,
       },
     },
+    additionalProperties: false,
   },
   example: {
     people: [person100.example],

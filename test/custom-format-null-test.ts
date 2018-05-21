@@ -1,11 +1,12 @@
 import validator from '@bahmutov/is-my-json-valid'
 import test from 'ava'
-import { JsonSchema } from '../src/objects'
 import { JsonSchemaFormats } from '../src/formats'
+import { JsonSchema } from '../src/objects'
 
 const schema: JsonSchema = {
   type: 'object',
   title: 'testSchema',
+  additionalProperties: false,
   properties: {
     t: {
       type: ['null', 'string'],

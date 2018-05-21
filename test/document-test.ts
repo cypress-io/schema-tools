@@ -92,6 +92,7 @@ test('JSON schema object to Markdown object', t => {
   const schema: JsonSchema = {
     title: 'test schema',
     type: 'object',
+    additionalProperties: false,
     properties: {
       id: {
         type: 'string',
@@ -109,6 +110,7 @@ test('JSON schema object to Markdown', t => {
   const schema: JsonSchema = {
     title: 'test schema',
     type: 'object',
+    additionalProperties: false,
     properties: {
       id: {
         type: 'string',
@@ -140,6 +142,7 @@ test('JSON schema with enumeration to Markdown', t => {
   const schema: JsonSchema = {
     title: 'test schema',
     type: 'object',
+    additionalProperties: false,
     properties: {
       id: {
         type: 'string',
