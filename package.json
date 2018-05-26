@@ -40,7 +40,8 @@
     "lodash.get": "4.4.2",
     "lodash.set": "4.3.2",
     "ramda": "0.25.0",
-    "json2md": "1.6.1"
+    "json2md": "1.6.1",
+    "quote": "0.4.0"
   },
   "devDependencies": {
     "@types/lodash.camelcase": "4.3.3",
@@ -53,7 +54,6 @@
     "husky": "0.15.0-rc.13",
     "jsen": "0.6.6",
     "prettier": "1.12.1",
-    "quote": "0.4.0",
     "semantic-release": "15.5.0",
     "terminal-banner": "1.1.0",
     "ts-node": "6.0.5",
