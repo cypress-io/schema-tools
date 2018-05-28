@@ -53,7 +53,7 @@
     "deps-ok": "1.4.1",
     "husky": "0.15.0-rc.13",
     "jsen": "0.6.6",
-    "prettier": "1.12.1",
+    "prettier": "1.13.0",
     "semantic-release": "15.5.0",
     "terminal-banner": "1.1.0",
     "ts-node": "6.0.5",
