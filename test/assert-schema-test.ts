@@ -27,6 +27,16 @@ test('passing example 1.0.0', t => {
   t.notThrows(fn)
 })
 
+test('returns original object if passes', t => {
+  t.plan(1)
+  const o = {
+    name: 'Mary',
+    age: 5,
+  }
+  const result = assertExample100(o)
+  t.is(result, o, 'original object returned')
+})
+
 test('missing name membership invitation 1.0.0', t => {
   t.plan(2)
 
