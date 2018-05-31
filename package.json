@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@types/lodash.camelcase": "4.3.3",
-    "@types/node": "9.6.19",
+    "@types/node": "9.6.20",
     "@types/ramda": "0.25.30",
     "ava": "0.25.0",
     "ava-ts": "0.24.6",
