@@ -1,6 +1,7 @@
 import camelCase from 'lodash.camelcase'
 import { map, path, uniq } from 'ramda'
 import {
+  JsonSchema,
   ObjectSchema,
   SchemaCollection,
   SchemaVersion,
@@ -22,6 +23,17 @@ export const semverToString = (s: Semver): SchemaVersion =>
  */
 export const normalizeName = (s: string): string => camelCase(s)
 
+export const normalizeRequiredProperties = (schema: JsonSchema) => {
+  if (schema.required === true) {
+    if (schema.properties) {
+      schema.required = Object.keys(schema.properties)
+    } else {
+      schema.required = []
+    }
+  }
+  return schema
+}
+
 /**
  * Returns single object with every object schema under semver key.
  * @param schemas Schemas to combine into single object
@@ -40,13 +52,7 @@ export const versionSchemas = (...schemas: ObjectSchema[]) => {
 
   const result: VersionedSchema = {}
   schemas.forEach(s => {
-    if (s.schema.required === true) {
-      if (s.schema.properties) {
-        s.schema.required = Object.keys(s.schema.properties)
-      } else {
-        s.schema.required = []
-      }
-    }
+    normalizeRequiredProperties(s.schema)
     const version = semverToString(s.version)
     result[version] = s
   })

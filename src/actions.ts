@@ -1,4 +1,5 @@
-import { clone } from 'ramda'
+import { clone, equals, reject } from 'ramda'
+import { normalizeRequiredProperties } from '../src/utils'
 import { JsonPropertyTypes, ObjectSchema } from './objects'
 
 //
@@ -46,13 +47,14 @@ export const addProperty = (options: AddPropertyOptions) => {
     newProp.format = options.propertyFormat
   }
 
+  normalizeRequiredProperties(newSchema.schema)
+  // now newSchema.schema.required is string[]
+  const required: string[] = newSchema.schema.required as string[]
+
   if (options.isRequired) {
-    if (!newSchema.schema.required) {
-      newSchema.schema.required = []
-    }
-    if (Array.isArray(newSchema.schema.required)) {
-      newSchema.schema.required.push(options.property)
-    }
+    required.push(options.property)
+  } else {
+    newSchema.schema.required = reject(equals(options.property), required)
   }
 
   if (options.propertyDescription) {

@@ -1,4 +1,5 @@
 import test from 'ava'
+import { ObjectSchema } from '../src'
 import { addProperty } from '../src/actions'
 import { person100 } from './example-schemas'
 
@@ -38,4 +39,41 @@ test('addProperty links property via see parameter', t => {
     person110,
     'new schema with property that points at different schema',
   )
+})
+
+test('addProperty respects isRequired false', t => {
+  t.plan(2)
+  const a: ObjectSchema = {
+    version: {
+      major: 1,
+      minor: 0,
+      patch: 0,
+    },
+    example: {
+      foo: 'foo',
+    },
+    schema: {
+      title: 'test',
+      type: 'object',
+      description: 'test schema A',
+      properties: {
+        foo: {
+          type: 'string',
+        },
+      },
+      required: true,
+      additionalProperties: false,
+    },
+  }
+  const b = addProperty({
+    schema: a,
+    description: 'Test schema B',
+    property: 'bar',
+    propertyType: 'string',
+    propertyFormat: null,
+    exampleValue: 'bar',
+    isRequired: false,
+  })
+  t.deepEqual(b.schema.required, ['foo'], 'bar should not be required')
+  t.snapshot(b, 'new schema without required new property "bar"')
 })
