@@ -131,6 +131,7 @@ assertSchema(schemas, formats)('Employee', '1.0.0')(someObject)
 * [validate](#validate)
 * [assertSchema](#assertschema)
 * [SchemaError](#schemaerror)
+* [addProperty](#addproperty)
 
 TODO describe current API
 
@@ -273,6 +274,10 @@ When asserting an object against a schema a custom error is thrown. It is an ins
 * `example` example object for the schema
 * `schemaName` is the title of the schema, like `Person`
 * `schemaVersion` the version like `1.0.0` of the schema violated, if known.
+
+### addProperty
+
+You can easily extend existing schema using included `addProperty` function. See [src/actions.ts](src/actions.ts) and [test/add-property-test.ts](test/add-property-test.ts) for examples.
 
 ## Debugging
 

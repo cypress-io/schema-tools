@@ -3,17 +3,20 @@ import { addProperty } from '../src/actions'
 import { person100 } from './example-schemas'
 
 test('addProperty creates example', t => {
-  const person110 = addProperty(
-    person100,
-    'Person',
-    'Person with title',
-    'title',
-    'string',
-    null,
-    'mr',
-    false,
-    'How to address this person',
-  )
+  const person110 = addProperty({
+    schema: person100,
+    description: 'Person with title',
+    property: 'title',
+    propertyType: 'string',
+    propertyFormat: null,
+    exampleValue: 'mr',
+    isRequired: false,
+    propertyDescription: 'How to address this person',
+  })
   t.truthy(person110, 'returns new schema')
-  t.snapshot(person110.example)
+  t.false(person110 === person100, 'returns new object')
+  t.is(person110.schema.title, person100.schema.title, 'copied title')
+  t.snapshot(person110.example, 'example object')
+  t.snapshot(person110.version, 'example version')
+  t.snapshot(person110.schema, 'new json schema')
 })

@@ -5,56 +5,64 @@ import { JsonPropertyTypes, ObjectSchema } from './objects'
 // different actions that produce new schema from existing one
 //
 
+type AddPropertyOptions = {
+  schema: ObjectSchema
+  title?: string
+  description: string
+  property: string
+  propertyType: JsonPropertyTypes
+  propertyFormat: string | null
+  exampleValue: any
+  isRequired?: boolean
+  propertyDescription?: string
+  see?: string
+}
+
 /**
  * Adds a property to another schema, creating a new schema.
  */
-export const addProperty = (
-  objectSchema: ObjectSchema,
-  title: string,
-  description: string,
-  property: string,
-  propertyType: JsonPropertyTypes,
-  propertyFormat: string | null,
-  exampleValue: any,
-  isRequired?: boolean,
-  propertyDescription?: string,
-  see?: string,
-) => {
-  const newSchema: ObjectSchema = cloneDeep(objectSchema)
-  newSchema.schema.description = description
-  newSchema.schema.title = title
+export const addProperty = (options: AddPropertyOptions) => {
+  const newSchema: ObjectSchema = cloneDeep(options.schema)
+  newSchema.schema.description = options.description
+  if (options.title) {
+    newSchema.schema.title = options.title
+  } else {
+    // copying title from previous schema BUT
+    // incrementing "minor" version because we are extending schema
+    newSchema.version.minor += 1
+  }
 
   if (!newSchema.schema.properties) {
     newSchema.schema.properties = {}
   }
 
-  newSchema.schema.properties[property] = {
-    type: propertyType,
+  newSchema.schema.properties[options.property] = {
+    type: options.propertyType,
   }
-  const newProp = newSchema.schema.properties[property]
+  const newProp = newSchema.schema.properties[options.property]
 
   // refine new property
-  if (propertyFormat) {
-    newProp.format = propertyFormat
+  if (options.propertyFormat) {
+    newProp.format = options.propertyFormat
   }
 
-  if (isRequired) {
+  if (options.isRequired) {
     if (!newSchema.schema.required) {
       newSchema.schema.required = []
     }
     if (Array.isArray(newSchema.schema.required)) {
-      newSchema.schema.required.push(property)
+      newSchema.schema.required.push(options.property)
     }
   }
 
-  if (propertyDescription) {
-    newProp.description = propertyDescription
+  if (options.propertyDescription) {
+    newProp.description = options.propertyDescription
   }
 
-  if (see) {
-    newProp.see = see
+  if (options.see) {
+    newProp.see = options.see
   }
 
-  newSchema.example[property] = cloneDeep(exampleValue)
+  newSchema.example[options.property] = cloneDeep(options.exampleValue)
   return newSchema
 }
