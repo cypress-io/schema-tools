@@ -1,4 +1,3 @@
-import la from 'lazy-ass'
 import camelCase from 'lodash.camelcase'
 import { map, path, uniq } from 'ramda'
 import {
@@ -29,10 +28,15 @@ export const normalizeName = (s: string): string => camelCase(s)
  * @example versionSchemas(TestInformation100, TestInformation110)
  */
 export const versionSchemas = (...schemas: ObjectSchema[]) => {
-  la(schemas.length, 'expected list of schemas')
+  if (!schemas.length) {
+    throw new Error('expected list of schemas')
+  }
+
   const titles: string[] = map(path(['schema', 'title']))(schemas) as string[]
   const unique = uniq(titles)
-  la(unique.length === 1, 'expected same schema titles, got', titles)
+  if (unique.length !== 1) {
+    throw new Error(`expected same schema titles, got ${titles.join(', ')}`)
+  }
 
   const result: VersionedSchema = {}
   schemas.forEach(s => {

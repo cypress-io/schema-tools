@@ -2,7 +2,6 @@
 
 import stringify from 'json-stable-stringify'
 import json2md from 'json2md'
-import la from 'lazy-ass'
 import quote from 'quote'
 import { flatten } from 'ramda'
 import {
@@ -42,7 +41,10 @@ export function documentSchemas(
       const schema: ObjectSchema = getObjectSchema(schemas)(schemaName)(
         version,
       ) as ObjectSchema
-      la(schema, 'cannot find schema', schemaName, version)
+
+      if (!schema) {
+        throw new Error(`cannot find schema ${schemaName}@${version}`)
+      }
 
       const schemaDoc = documentSchema(schema.schema, schemas, formats)
 
