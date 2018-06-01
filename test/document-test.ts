@@ -4,12 +4,13 @@ import { clone } from 'ramda'
 import { documentSchemas, setPackageName } from '../src'
 import { documentCustomFormats } from '../src/document/doc-formats'
 import {
+  documentObjectSchema,
   documentProperties,
   documentSchema,
   findUsedColumns,
 } from '../src/document/utils'
 import { CustomFormats } from '../src/formats'
-import { JsonProperties, JsonSchema } from '../src/objects'
+import { JsonProperties, JsonSchema, ObjectSchema } from '../src/objects'
 import { exampleFormats, schemas } from './example-schemas'
 
 test('documents just schemas', t => {
@@ -154,5 +155,40 @@ test('JSON schema with enumeration to Markdown', t => {
     },
   }
   const result = json2md(documentSchema(schema))
+  t.snapshot(result)
+})
+
+test('document deprecated schema', t => {
+  t.plan(1)
+  const jsonSchema: JsonSchema = {
+    title: 'testSchema',
+    type: 'object',
+    additionalProperties: false,
+    description: 'This is a test schema',
+    deprecated: 'no longer in use',
+    properties: {
+      id: {
+        type: 'string',
+      },
+      name: {
+        type: 'string',
+        enum: ['joe', 'mary'],
+      },
+    },
+  }
+  const schema: ObjectSchema = {
+    version: {
+      major: 1,
+      minor: 2,
+      patch: 3,
+    },
+    schema: jsonSchema,
+    example: {
+      id: 'abc',
+      name: 'joe',
+    },
+  }
+  const result = json2md(documentObjectSchema(schema))
+  // console.log(result)
   t.snapshot(result)
 })

@@ -1,5 +1,6 @@
+import stringify from 'json-stable-stringify'
 import quote from 'quote'
-import { find, toLower } from 'ramda'
+import { find, flatten, toLower } from 'ramda'
 import { normalizeName, schemaNames, semverToString } from '..'
 import { CustomFormats } from '../formats'
 import {
@@ -162,4 +163,52 @@ export const documentSchema = (
   } else {
     return { p: 'Hmm, no properties found in this schema' }
   }
+}
+
+const schemaNameHeading = (name: string, version: string) =>
+  `${name}@${version}`
+
+export const documentObjectSchema = (
+  schema: ObjectSchema,
+  schemas?: SchemaCollection,
+  formats?: CustomFormats,
+) => {
+  const schemaName = schema.schema.title
+
+  if (schemaName.includes(' ')) {
+    throw new Error(`Schema title contains spaces "${schemaName}"
+      This can cause problems generating anchors!`)
+  }
+
+  const schemaVersion = semverToString(schema.version)
+
+  const start: object[] = [{ h3: schemaNameHeading(schemaName, schemaVersion) }]
+  if (schema.package) {
+    start.push({
+      p: `Defined in ${ticks(schema.package)}`,
+    })
+  }
+  if (schema.schema.description) {
+    start.push({ p: schema.schema.description })
+  }
+
+  if (schema.schema.deprecated) {
+    start.push({
+      p: `**deprecated** ${schema.schema.deprecated}`,
+    })
+  }
+
+  const propertiesTable = documentSchema(schema.schema, schemas, formats)
+
+  const exampleFragment = flatten([
+    { p: 'Example:' },
+    {
+      code: {
+        language: 'json',
+        content: stringify(schema.example, { space: '  ' }),
+      },
+    },
+  ])
+
+  return flatten(start.concat(propertiesTable).concat(exampleFragment))
 }

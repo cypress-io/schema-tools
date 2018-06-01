@@ -52,6 +52,8 @@ export type JsonProperty = {
   patternProperties?: object
   additionalProperties?: boolean
   enum?: string[]
+  // if the property is deprecated show this message
+  deprecated?: string
 }
 
 export type JsonProperties = {
@@ -69,6 +71,7 @@ export type JsonSchema = {
   required?: string[] | true
   // does the schema allow unknown properties?
   additionalProperties: boolean
+  deprecated?: string
 }
 
 export type ObjectSchema = {

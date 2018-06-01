@@ -1,11 +1,8 @@
 // generates Markdown document with all schema information
 
-import stringify from 'json-stable-stringify'
 import json2md from 'json2md'
-import quote from 'quote'
 import { flatten } from 'ramda'
 import {
-  getExample,
   getObjectSchema,
   getSchemaVersions,
   normalizeName,
@@ -14,9 +11,9 @@ import {
 import { CustomFormats } from '../formats'
 import { ObjectSchema, SchemaCollection } from '../objects'
 import { documentCustomFormats } from './doc-formats'
-import { anchor, documentSchema } from './utils'
+import { anchor, documentObjectSchema } from './utils'
 
-const ticks = quote({ quotes: '`' })
+// const ticks = quote({ quotes: '`' })
 const title = [{ h1: 'Schemas' }]
 const titleLink = [{ p: '[🔝](#schemas)' }]
 
@@ -46,36 +43,15 @@ export function documentSchemas(
         throw new Error(`cannot find schema ${schemaName}@${version}`)
       }
 
-      const schemaDoc = documentSchema(schema.schema, schemas, formats)
+      const schemaDoc = documentObjectSchema(schema, schemas, formats)
 
-      const start: any[] = [{ h3: `${schemaName}@${version}` }]
-      if (schema.package) {
-        start.push({
-          p: `Defined in ${ticks(schema.package)}`,
-        })
-      }
-      if (schema.schema.description) {
-        start.push({ p: schema.schema.description })
-      }
-
-      const example = getExample(schemas)(schemaName)(version)
-      const exampleFragment = flatten([
-        schemaDoc,
-        { p: 'Example:' },
-        {
-          code: {
-            language: 'json',
-            content: stringify(example, { space: '  ' }),
-          },
-        },
-        titleLink,
-      ])
-      return flatten(start.concat(exampleFragment))
+      return flatten(schemaDoc.concat(titleLink))
     }
 
     const versionFragments = versions.map(documentSchemaVersion)
 
-    return [{ h2: normalizeName(schemaName) }].concat(flatten(versionFragments))
+    const start: object[] = [{ h2: normalizeName(schemaName) }]
+    return start.concat(flatten(versionFragments))
   }
 
   const fragments = flatten(schemaNames(schemas).map(toDoc))
@@ -97,10 +73,6 @@ export function documentSchemas(
       return linkWithVersions
     }
   }
-
-  // const extractH2 = map(prop('h2'))
-  // const filterH2 = filter(has('h2'))
-  // const headings = extractH2(filterH2(fragments))
 
   const headings = schemaNames(schemas)
   const toc = [
