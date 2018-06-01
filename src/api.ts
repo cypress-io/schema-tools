@@ -1,10 +1,10 @@
 import validator from '@bahmutov/is-my-json-valid'
 import debugApi from 'debug'
 import stringify from 'json-stable-stringify'
-import cloneDeep from 'lodash.clonedeep'
 import get from 'lodash.get'
 import set from 'lodash.set'
 import {
+  clone,
   difference,
   filter,
   find,
@@ -308,7 +308,7 @@ export const assertBySchema = (
   )
 
   const replace = () => {
-    const cloned = cloneDeep(object)
+    const cloned = clone(object)
     allOptions.substitutions.forEach(property => {
       const value = get(example, property)
       set(cloned, property, value)

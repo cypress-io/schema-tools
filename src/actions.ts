@@ -1,4 +1,4 @@
-import cloneDeep from 'lodash.clonedeep'
+import { clone } from 'ramda'
 import { JsonPropertyTypes, ObjectSchema } from './objects'
 
 //
@@ -22,7 +22,7 @@ type AddPropertyOptions = {
  * Adds a property to another schema, creating a new schema.
  */
 export const addProperty = (options: AddPropertyOptions) => {
-  const newSchema: ObjectSchema = cloneDeep(options.schema)
+  const newSchema: ObjectSchema = clone(options.schema)
   newSchema.schema.description = options.description
   if (options.title) {
     newSchema.schema.title = options.title
@@ -63,6 +63,6 @@ export const addProperty = (options: AddPropertyOptions) => {
     newProp.see = options.see
   }
 
-  newSchema.example[options.property] = cloneDeep(options.exampleValue)
+  newSchema.example[options.property] = clone(options.exampleValue)
   return newSchema
 }
