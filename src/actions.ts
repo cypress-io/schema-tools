@@ -15,7 +15,7 @@ type AddPropertyOptions = {
   exampleValue: any
   isRequired?: boolean
   propertyDescription?: string
-  see?: string
+  see?: string | ObjectSchema
 }
 
 /**
