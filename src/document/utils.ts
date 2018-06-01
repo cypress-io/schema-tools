@@ -107,6 +107,8 @@ export const documentProperties = (
     : Object.keys(properties)
   const isRequired = name => requiredProperties.indexOf(name) !== -1
   const typeText = type => (Array.isArray(type) ? type.join(' or ') : type)
+  const deprecatedMessage = (value: JsonProperty) =>
+    value.deprecated ? `**deprecated** ${value.deprecated}` : emptyMark
 
   return Object.keys(properties)
     .sort()
@@ -119,6 +121,7 @@ export const documentProperties = (
         format: formatToMarkdown(schemas, formats)(value),
         enum: enumToMarkdown(value.enum),
         description: value.description ? value.description : emptyMark,
+        deprecated: deprecatedMessage(value),
       }
     })
 }
@@ -144,6 +147,7 @@ export const documentSchema = (
       'format',
       'enum',
       'description',
+      'deprecated',
     ]
     const usedHeaders = findUsedColumns(headers, rows)
     const table: object[] = [

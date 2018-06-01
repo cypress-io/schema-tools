@@ -189,6 +189,39 @@ test('document deprecated schema', t => {
     },
   }
   const result = json2md(documentObjectSchema(schema))
-  // console.log(result)
+  t.snapshot(result)
+})
+
+test('document deprecated schema property', t => {
+  t.plan(1)
+  const jsonSchema: JsonSchema = {
+    title: 'testSchema',
+    type: 'object',
+    additionalProperties: true,
+    description: 'This is a test schema',
+    properties: {
+      id: {
+        type: 'string',
+      },
+      name: {
+        type: 'string',
+        enum: ['joe', 'mary'],
+        deprecated: 'use property "fullName" instead',
+      },
+    },
+  }
+  const schema: ObjectSchema = {
+    version: {
+      major: 1,
+      minor: 2,
+      patch: 3,
+    },
+    schema: jsonSchema,
+    example: {
+      id: 'abc',
+      name: 'joe',
+    },
+  }
+  const result = json2md(documentObjectSchema(schema))
   t.snapshot(result)
 })
