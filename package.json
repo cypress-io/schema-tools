@@ -10,6 +10,8 @@
     "lint": "tslint --project .",
     "build": "tsc",
     "prebuild": "npm run deps && npm run prettier",
+    "postbuild": "npm run check-transpiled-correctly",
+    "check-transpiled-correctly": "node .",
     "deps": "deps-ok",
     "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
     "semantic-release": "semantic-release",

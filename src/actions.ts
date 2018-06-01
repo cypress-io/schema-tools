@@ -1,6 +1,6 @@
 import { clone, equals, reject } from 'ramda'
-import { normalizeRequiredProperties } from '../src/utils'
 import { JsonPropertyTypes, ObjectSchema } from './objects'
+import { normalizeRequiredProperties } from './utils'
 
 //
 // different actions that produce new schema from existing one
