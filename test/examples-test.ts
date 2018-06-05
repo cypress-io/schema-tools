@@ -1,9 +1,9 @@
 import test from 'ava'
 import {
-  schemaNames,
-  getSchemaVersions,
-  getExample,
   assertSchema,
+  getExample,
+  getSchemaVersions,
+  schemaNames,
 } from '../src'
 import { schemas } from './example-schemas'
 
@@ -14,6 +14,15 @@ const assert = assertSchema(schemas)
 test('it has several schema names', t => {
   t.true(Array.isArray(names))
   t.true(names.length > 0)
+})
+
+test('getExample is curried', t => {
+  t.truthy(getExample(schemas, 'Person', '1.0.0'), 'all arguments together')
+  t.truthy(
+    getExample(schemas)('Person', '1.0.0'),
+    'schemas then name and version',
+  )
+  t.truthy(getExample(schemas)('Person')('1.0.0'), 'curried version')
 })
 
 // TODO factor out these functions into API to check that every schema has an example

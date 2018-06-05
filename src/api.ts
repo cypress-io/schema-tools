@@ -5,6 +5,7 @@ import get from 'lodash.get'
 import set from 'lodash.set'
 import {
   clone,
+  curry,
   difference,
   filter,
   find,
@@ -92,16 +93,16 @@ export const getSchemaVersions = (schemas: SchemaCollection) => (
  * @example getExample('membershipInvitation')('1.0.0')
  * // {id: '...', email: '...', role: '...'}
  */
-export const getExample = (schemas: SchemaCollection) => (
-  schemaName: string,
-) => (version: SchemaVersion) => {
-  const o = getObjectSchema(schemas)(schemaName)(version)
-  if (!o) {
-    debug('could not find object schema %s@%s', schemaName, version)
-    return
-  }
-  return o.example
-}
+export const getExample = curry(
+  (schemas: SchemaCollection, schemaName: string, version: SchemaVersion) => {
+    const o = getObjectSchema(schemas)(schemaName)(version)
+    if (!o) {
+      debug('could not find object schema %s@%s', schemaName, version)
+      return
+    }
+    return o.example
+  },
+)
 
 /**
  * Error returned by the json validation library.
