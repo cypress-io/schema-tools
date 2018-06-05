@@ -33,6 +33,7 @@ import {
   SchemaVersion,
 } from './objects'
 import { sanitize } from './sanitize'
+import { trim } from './trim'
 import * as utils from './utils'
 
 const debug = debugApi('schema-tools')
@@ -44,15 +45,11 @@ export const getVersionedSchema = (schemas: SchemaCollection) => (
   return schemas[name]
 }
 
-/**
- * Returns object schema given a name and a version. Curried.
- * @param schemaName
- * @returns an object or undefined
- * @example getObjectSchema('membershipInvitation')('1.0.0')
- */
-export const getObjectSchema = (schemas: SchemaCollection) => (
+const _getObjectSchema = (
+  schemas: SchemaCollection,
   schemaName: string,
-) => (version: SchemaVersion): ObjectSchema | undefined => {
+  version: SchemaVersion,
+): ObjectSchema | undefined => {
   schemaName = utils.normalizeName(schemaName)
 
   const namedSchemas = schemas[schemaName]
@@ -62,6 +59,15 @@ export const getObjectSchema = (schemas: SchemaCollection) => (
   }
   return namedSchemas[version] as ObjectSchema
 }
+
+/**
+ * Returns object schema given a name and a version. Curried.
+ * @returns an object or undefined
+ * @example
+ *    getObjectSchema(schemas, 'membershipInvitation', '1.0.0')
+ *    getObjectSchema(schemas)('membershipInvitation')('1.0.0')
+ */
+export const getObjectSchema = curry(_getObjectSchema)
 
 /**
  * Returns normalized names of all schemas
@@ -437,6 +443,7 @@ export const bind = (...options: BindOptions[]) => {
     getExample: getExample(schemas),
     sanitize: sanitize(schemas, defaults),
     validate: validate(schemas),
+    trim: trim(schemas),
   }
   return api
 }

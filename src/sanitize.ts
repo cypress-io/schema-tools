@@ -119,7 +119,7 @@ export const sanitize = (
   formatDefaults?: FormatDefaults,
 ) => (name: string, version: string) => (object: PlainObject) => {
   assertSchema(schemas)(name, version)(object)
-  const schema = getObjectSchema(schemas)(name)(version)
+  const schema = getObjectSchema(schemas, name, version)
   if (!schema) {
     throw new Error(`Could not schema ${name}@${version}`)
   }
