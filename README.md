@@ -130,6 +130,8 @@ assertSchema(schemas, formats)('Employee', '1.0.0')(someObject)
 * [documentSchemas](#documentschemas)
 * [validate](#validate)
 * [assertSchema](#assertschema)
+* [trim](#trim)
+* [bind](#bind)
 * [SchemaError](#schemaerror)
 * [addProperty](#addproperty)
 
@@ -249,6 +251,20 @@ By default the json schema check is [greedy](https://github.com/mafintosh/is-my-
 
 ```js
 assertSchema(schemas, formats)('Person', '1.0.0', { greedy: false })
+```
+
+### trim
+
+Often you have an object that has _more_ properties than the schema allows. For example if you have new result that should go to "older" clients, you might want to `trim` the result object and then assert schema.
+
+```js
+import { trim } from '@cypress/schema-tools'
+const trimPerson = trim(schemas, 'Person', '1.0.0')
+const person = ... // some result with lots of properties
+const trimmed = trimPerson(person)
+// trimmed should be valid Person 1.0.0 object
+// if the values are actually matching Person@1.0.0
+// all extra properties should have been removed
 ```
 
 ### bind
