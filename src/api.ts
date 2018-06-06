@@ -69,6 +69,22 @@ const _getObjectSchema = (
  */
 export const getObjectSchema = curry(_getObjectSchema)
 
+const _hasSchema = (
+  schemas: SchemaCollection,
+  schemaName: string,
+  version: SchemaVersion,
+): boolean => Boolean(_getObjectSchema(schemas, schemaName, version))
+
+/**
+ * Returns true if the given schema collection has schema by
+ * name and version. Curried.
+ * @returns `true` if there is a schema with such name and version
+ * @example
+ *    getObjectSchema(schemas, 'membershipInvitation', '1.0.0') // true
+ *    getObjectSchema(schemas)('fooBarBaz', '1.0.0') // false
+ */
+export const hasSchema = curry(_hasSchema)
+
 /**
  * Returns normalized names of all schemas
  *
@@ -444,6 +460,7 @@ export const bind = (...options: BindOptions[]) => {
     sanitize: sanitize(schemas, defaults),
     validate: validate(schemas),
     trim: trim(schemas),
+    hasSchema: hasSchema(schemas),
   }
   return api
 }

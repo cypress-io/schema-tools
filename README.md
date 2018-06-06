@@ -6,9 +6,9 @@
 
 Explicit [JSON schemas][json-schema] describing objects passed around in your system are good!
 
-* they are a living testable documentation instead of manual Wiki editing
-* provide examples for tests and integrations
-* validate inputs and outputs of the API calls
+- they are a living testable documentation instead of manual Wiki editing
+- provide examples for tests and integrations
+- validate inputs and outputs of the API calls
 
 ## Schemas
 
@@ -127,15 +127,25 @@ assertSchema(schemas, formats)('Employee', '1.0.0')(someObject)
 
 ## API
 
-* [documentSchemas](#documentschemas)
-* [validate](#validate)
-* [assertSchema](#assertschema)
-* [trim](#trim)
-* [bind](#bind)
-* [SchemaError](#schemaerror)
-* [addProperty](#addproperty)
+- [hasSchema](#hasschema)
+- [documentSchemas](#documentschemas)
+- [validate](#validate)
+- [assertSchema](#assertschema)
+- [trim](#trim)
+- [bind](#bind)
+- [SchemaError](#schemaerror)
+- [addProperty](#addproperty)
 
-TODO describe current API
+### hasSchema
+
+Returns `true` if the given schema exists in the collection. Curried function.
+
+```typescript
+import { hasSchema } from '@cypress/schema-tools'
+import { schemas } from './schemas'
+hasSchema(schemas, 'Name', '1.0.0') // true
+hasSchema(schemas)('FooBarBaz')('1.0.0') // false
+```
 
 ### documentSchemas
 
@@ -285,11 +295,11 @@ See [test/bind-test.ts](test/bind-test.ts) for examples
 
 When asserting an object against a schema a custom error is thrown. It is an instance of `Error`, with a very detailed message. It also has additional properties.
 
-* `errors` is the list of strings with individual validation errors
-* `object` the object being validated
-* `example` example object for the schema
-* `schemaName` is the title of the schema, like `Person`
-* `schemaVersion` the version like `1.0.0` of the schema violated, if known.
+- `errors` is the list of strings with individual validation errors
+- `object` the object being validated
+- `example` example object for the schema
+- `schemaName` is the title of the schema, like `Person`
+- `schemaVersion` the version like `1.0.0` of the schema violated, if known.
 
 ### addProperty
 

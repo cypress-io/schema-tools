@@ -1,6 +1,7 @@
 import test from 'ava'
 import {
   assertSchema,
+  bind,
   getExample,
   getSchemaVersions,
   schemaNames,
@@ -10,6 +11,16 @@ import { schemas } from './example-schemas'
 const names = schemaNames(schemas)
 const getSchemaExample = getExample(schemas)
 const assert = assertSchema(schemas)
+
+const api = bind({ schemas })
+
+test('has Person schema', t => {
+  t.true(api.hasSchema('Person', '1.0.0'))
+})
+
+test('has no Person schema 10000.0.0', t => {
+  t.false(api.hasSchema('Person', '10000.0.0'))
+})
 
 test('it has several schema names', t => {
   t.true(Array.isArray(names))
