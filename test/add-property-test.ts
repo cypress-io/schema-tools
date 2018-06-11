@@ -26,6 +26,33 @@ test('addProperty creates example', t => {
   t.snapshot(person110.schema, 'new json schema')
 })
 
+test('addProperty several properties', t => {
+  t.plan(1)
+  const person110 = addProperty(
+    {
+      schema: person100,
+      description: 'Person with title',
+    },
+    {
+      property: 'title',
+      propertyType: 'string',
+      propertyFormat: null,
+      exampleValue: 'mr',
+      isRequired: false,
+      propertyDescription: 'How to address this person',
+    },
+    {
+      property: 'mood',
+      propertyType: 'string',
+      propertyFormat: null,
+      exampleValue: 'blue',
+      isRequired: false,
+      propertyDescription: 'How does this person feel',
+    },
+  )
+  t.snapshot(person110, 'added two properties: title and mood')
+})
+
 test('addProperty links property via see parameter', t => {
   t.plan(1)
   const person110 = addProperty(

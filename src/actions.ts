@@ -1,5 +1,5 @@
 import { clone, equals, reject } from 'ramda'
-import { JsonPropertyTypes, ObjectSchema } from './objects'
+import { JsonProperties, JsonPropertyTypes, ObjectSchema } from './objects'
 import { normalizeRequiredProperties } from './utils'
 
 //
@@ -27,7 +27,7 @@ type AddPropertyOptions = {
  */
 export const addProperty = (
   from: NewSchemaOptions,
-  options: AddPropertyOptions,
+  ...newProperties: AddPropertyOptions[]
 ) => {
   const newSchema: ObjectSchema = clone(from.schema)
   newSchema.schema.description = from.description
@@ -43,34 +43,38 @@ export const addProperty = (
     newSchema.schema.properties = {}
   }
 
-  newSchema.schema.properties[options.property] = {
-    type: options.propertyType,
-  }
-  const newProp = newSchema.schema.properties[options.property]
+  newProperties.forEach((options: AddPropertyOptions) => {
+    const newProperties = newSchema.schema.properties as JsonProperties
+    newProperties[options.property] = {
+      type: options.propertyType,
+    }
+    const newProp = newProperties[options.property]
 
-  // refine new property
-  if (options.propertyFormat) {
-    newProp.format = options.propertyFormat
-  }
+    // refine new property
+    if (options.propertyFormat) {
+      newProp.format = options.propertyFormat
+    }
 
-  normalizeRequiredProperties(newSchema.schema)
-  // now newSchema.schema.required is string[]
-  const required: string[] = newSchema.schema.required as string[]
+    normalizeRequiredProperties(newSchema.schema)
+    // now newSchema.schema.required is string[]
+    const required: string[] = newSchema.schema.required as string[]
 
-  if (options.isRequired) {
-    required.push(options.property)
-  } else {
-    newSchema.schema.required = reject(equals(options.property), required)
-  }
+    if (options.isRequired) {
+      required.push(options.property)
+    } else {
+      newSchema.schema.required = reject(equals(options.property), required)
+    }
 
-  if (options.propertyDescription) {
-    newProp.description = options.propertyDescription
-  }
+    if (options.propertyDescription) {
+      newProp.description = options.propertyDescription
+    }
 
-  if (options.see) {
-    newProp.see = options.see
-  }
+    if (options.see) {
+      newProp.see = options.see
+    }
 
-  newSchema.example[options.property] = clone(options.exampleValue)
+    newSchema.example[options.property] = clone(options.exampleValue)
+  })
+
   return newSchema
 }
