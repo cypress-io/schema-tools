@@ -186,7 +186,9 @@ export const documentObjectSchema = (
 
   const schemaVersion = semverToString(schema.version)
 
-  const start: object[] = [{ h3: schemaNameHeading(schemaName, schemaVersion) }]
+  const start: object[] = [
+    { h3: schemaNameHeading(normalizeName(schemaName), schemaVersion) },
+  ]
   if (schema.package) {
     start.push({
       p: `Defined in ${ticks(schema.package)}`,
