@@ -6,10 +6,13 @@ import { normalizeRequiredProperties } from './utils'
 // different actions that produce new schema from existing one
 //
 
-type AddPropertyOptions = {
+type NewSchemaOptions = {
   schema: ObjectSchema
   title?: string
   description: string
+}
+
+type AddPropertyOptions = {
   property: string
   propertyType: JsonPropertyTypes
   propertyFormat: string | null
@@ -22,11 +25,14 @@ type AddPropertyOptions = {
 /**
  * Adds a property to another schema, creating a new schema.
  */
-export const addProperty = (options: AddPropertyOptions) => {
-  const newSchema: ObjectSchema = clone(options.schema)
-  newSchema.schema.description = options.description
-  if (options.title) {
-    newSchema.schema.title = options.title
+export const addProperty = (
+  from: NewSchemaOptions,
+  options: AddPropertyOptions,
+) => {
+  const newSchema: ObjectSchema = clone(from.schema)
+  newSchema.schema.description = from.description
+  if (from.title) {
+    newSchema.schema.title = from.title
   } else {
     // copying title from previous schema BUT
     // incrementing "minor" version because we are extending schema

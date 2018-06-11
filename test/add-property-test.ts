@@ -4,16 +4,20 @@ import { addProperty } from '../src/actions'
 import { person100 } from './example-schemas'
 
 test('addProperty creates example', t => {
-  const person110 = addProperty({
-    schema: person100,
-    description: 'Person with title',
-    property: 'title',
-    propertyType: 'string',
-    propertyFormat: null,
-    exampleValue: 'mr',
-    isRequired: false,
-    propertyDescription: 'How to address this person',
-  })
+  const person110 = addProperty(
+    {
+      schema: person100,
+      description: 'Person with title',
+    },
+    {
+      property: 'title',
+      propertyType: 'string',
+      propertyFormat: null,
+      exampleValue: 'mr',
+      isRequired: false,
+      propertyDescription: 'How to address this person',
+    },
+  )
   t.truthy(person110, 'returns new schema')
   t.false(person110 === person100, 'returns new object')
   t.is(person110.schema.title, person100.schema.title, 'copied title')
@@ -24,17 +28,21 @@ test('addProperty creates example', t => {
 
 test('addProperty links property via see parameter', t => {
   t.plan(1)
-  const person110 = addProperty({
-    schema: person100,
-    description: 'Person with title',
-    property: 'title',
-    propertyType: 'string',
-    propertyFormat: null,
-    exampleValue: 'mr',
-    isRequired: false,
-    propertyDescription: 'How to address this person',
-    see: person100,
-  })
+  const person110 = addProperty(
+    {
+      schema: person100,
+      description: 'Person with title',
+    },
+    {
+      property: 'title',
+      propertyType: 'string',
+      propertyFormat: null,
+      exampleValue: 'mr',
+      isRequired: false,
+      propertyDescription: 'How to address this person',
+      see: person100,
+    },
+  )
   t.snapshot(
     person110,
     'new schema with property that points at different schema',
@@ -65,15 +73,19 @@ test('addProperty respects isRequired false', t => {
       additionalProperties: false,
     },
   }
-  const b = addProperty({
-    schema: a,
-    description: 'Test schema B',
-    property: 'bar',
-    propertyType: 'string',
-    propertyFormat: null,
-    exampleValue: 'bar',
-    isRequired: false,
-  })
+  const b = addProperty(
+    {
+      schema: a,
+      description: 'Test schema B',
+    },
+    {
+      property: 'bar',
+      propertyType: 'string',
+      propertyFormat: null,
+      exampleValue: 'bar',
+      isRequired: false,
+    },
+  )
   t.deepEqual(b.schema.required, ['foo'], 'bar should not be required')
   t.snapshot(b, 'new schema without required new property "bar"')
 })
