@@ -6,6 +6,5 @@
     "node_modules/": true,
     "dist/": true
   },
-  "workbench.colorTheme": "Snazzy Operator",
   "git.ignoreLimitWarning": true
 }

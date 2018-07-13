@@ -1,5 +1,11 @@
-import { clone, equals, reject } from 'ramda'
-import { JsonProperties, JsonPropertyTypes, ObjectSchema } from './objects'
+import get from 'lodash.get'
+import { clone, equals, reject, mergeDeepRight, union } from 'ramda'
+import {
+  JsonProperties,
+  JsonPropertyTypes,
+  ObjectSchema,
+  PlainObject,
+} from './objects'
 import { normalizeRequiredProperties } from './utils'
 
 //
@@ -25,7 +31,7 @@ type AddPropertyOptions = {
 /**
  * Adds a property to another schema, creating a new schema.
  */
-export const addProperty = (
+const addProperty = (
   from: NewSchemaOptions,
   ...newProperties: AddPropertyOptions[]
 ) => {
@@ -78,3 +84,24 @@ export const addProperty = (
 
   return newSchema
 }
+
+const extend = (from: ObjectSchema, schemaObj: PlainObject) => {
+  const newSchema: ObjectSchema = mergeDeepRight(clone(from), schemaObj)
+
+  // bump the minor version if it was not given
+  if (!equals(schemaObj.version, newSchema.version)) {
+    newSchema.version.minor += 1
+  }
+
+  const required = get(schemaObj, 'schema.required')
+
+  if (required) {
+    const existingRequired = get(from, 'schema.required', [])
+
+    newSchema.schema.required = union(existingRequired, required)
+  }
+
+  return newSchema
+}
+
+export { extend, addProperty }
