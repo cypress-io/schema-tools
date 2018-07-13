@@ -1,12 +1,13 @@
 import camelCase from 'lodash.camelcase'
 import { map, path, uniq } from 'ramda'
+import reduce from 'lodash.reduce'
 import {
-  JsonSchema,
   ObjectSchema,
   SchemaCollection,
   SchemaVersion,
   Semver,
   VersionedSchema,
+  JsonSchema,
 } from './objects'
 
 /**
@@ -26,7 +27,15 @@ export const normalizeName = (s: string): string => camelCase(s)
 export const normalizeRequiredProperties = (schema: JsonSchema) => {
   if (schema.required === true) {
     if (schema.properties) {
-      schema.required = Object.keys(schema.properties)
+      const reducer = (memo, obj, key) => {
+        if (obj.required !== false) {
+          memo.push(key)
+        }
+
+        return memo
+      }
+
+      schema.required = reduce(schema.properties, reducer, [])
     } else {
       schema.required = []
     }

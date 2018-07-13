@@ -3,6 +3,7 @@ import {
   CustomFormats,
   JsonSchemaFormats,
   detectors,
+  extend,
 } from '../src'
 import { ObjectSchema, SchemaCollection, VersionedSchema } from '../src/objects'
 import { combineSchemas, versionSchemas } from '../src/utils'
@@ -14,12 +15,12 @@ const name: CustomFormat = {
   defaultValue: 'Buddy',
 }
 
-export const exampleFormats: CustomFormats = {
+const exampleFormats: CustomFormats = {
   name,
 }
 
 // individual schema describing "Person" v1.0.0
-export const person100: ObjectSchema = {
+const person100: ObjectSchema = {
   version: {
     major: 1,
     minor: 0,
@@ -50,6 +51,22 @@ export const person100: ObjectSchema = {
   },
 }
 
+const person110: ObjectSchema = extend(person100, {
+  schema: {
+    description: 'Person with title',
+    properties: {
+      title: {
+        type: 'string',
+        format: null,
+        description: 'How to address this person',
+      },
+    },
+  },
+  example: {
+    title: 'mr',
+  },
+})
+
 // example schema that has an array of "Person" objects
 const team100: ObjectSchema = {
   version: {
@@ -77,16 +94,57 @@ const team100: ObjectSchema = {
   },
 }
 
+const car100: ObjectSchema = {
+  version: {
+    major: 1,
+    minor: 0,
+    patch: 0,
+  },
+  schema: {
+    type: 'object',
+    title: 'Car',
+    description: 'A motor vehicle',
+    properties: {
+      color: {
+        type: 'string',
+      },
+    },
+    additionalProperties: false,
+    required: true,
+  },
+  example: {
+    color: 'red',
+  },
+}
+
+const car110: ObjectSchema = extend(car100, {
+  schema: {
+    properties: {
+      doors: {
+        type: 'number',
+        required: false,
+      },
+    },
+  },
+  example: {
+    doors: 2,
+  },
+})
+
 // collection of "Person" schemas by version.
 // In our case there will be single version, but here is where we can combine multiple
 // versions like: versionSchemas(person100, person110, person200, ...)
-const personVersions: VersionedSchema = versionSchemas(person100)
+const personVersions: VersionedSchema = versionSchemas(person100, person110)
 const teamVersions: VersionedSchema = versionSchemas(team100)
+const carVersions: VersionedSchema = versionSchemas(car100, car110)
 
 // combines "Person" versions with other schemas if any
-export const schemas: SchemaCollection = combineSchemas(
+const schemas: SchemaCollection = combineSchemas(
   personVersions,
   teamVersions,
+  carVersions,
 )
 
-export const formats: JsonSchemaFormats = detectors(exampleFormats)
+const formats: JsonSchemaFormats = detectors(exampleFormats)
+
+export { car100, person100, person110, formats, schemas, exampleFormats }
