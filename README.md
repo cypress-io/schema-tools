@@ -135,6 +135,7 @@ assertSchema(schemas, formats)('Employee', '1.0.0')(someObject)
 - [bind](#bind)
 - [SchemaError](#schemaerror)
 - [addProperty](#addproperty)
+- [extend](#extend)
 
 ### hasSchema
 
@@ -304,6 +305,18 @@ When asserting an object against a schema a custom error is thrown. It is an ins
 ### addProperty
 
 You can easily extend existing schema using included `addProperty` function. See [src/actions.ts](src/actions.ts) and [test/add-property-test.ts](test/add-property-test.ts) for examples.
+
+### extend
+
+Rather than add a single property at a time, you can simply use `extend(existingSchema, newSchemaObj)`.
+
+The `existingSchema` will be deep cloned and have the `newSchemaObj` properties merged in.
+
+If `newSchemaObj.version` is not provided, then the previous schema's semver `minor` property will be bumped by one.
+
+Fields like `required` are automatically unioned.
+
+See [src/actions.ts](src/actions.ts) and [test/extend-schema-test.ts](test/extend-schema-test.ts) for examples.
 
 ## Debugging
 
