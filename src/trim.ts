@@ -1,6 +1,27 @@
-import { clone, curry, difference, keys } from 'ramda'
+import { curry, keys, reduce, contains } from 'ramda'
 import { getObjectSchema } from './api'
 import { SchemaCollection, SchemaVersion } from './objects'
+import { isJsonSchema } from './sanitize'
+
+const reduceToSchema = (object: object, schema) => {
+  schema = schema.schema.properties
+  const objectProps = keys(object)
+  const schemaProps = keys(schema)
+  return reduce(
+    (trimmedObj, prop) => {
+      if (contains(prop, schemaProps)) {
+        if (isJsonSchema(object[prop])) {
+          trimmedObj[prop] = reduceToSchema(object[prop], schema[prop])
+        } else {
+          trimmedObj[prop] = object[prop]
+        }
+      }
+      return trimmedObj
+    },
+    {},
+    objectProps,
+  )
+}
 
 const trimObject = (
   schemas: SchemaCollection,
@@ -16,17 +37,7 @@ const trimObject = (
     throw new Error('Expected an object to trim')
   }
 
-  const result = clone(object)
-
-  const objectProperties = keys(result)
-  const schemaProperties = keys(schema.schema.properties)
-  const extraProperties = difference(objectProperties, schemaProperties)
-  // TODO recursively go into properties that are objects schemas themselves
-  extraProperties.forEach(extra => {
-    delete result[extra]
-  })
-
-  return result
+  return reduceToSchema(object, schema)
 }
 
 /**

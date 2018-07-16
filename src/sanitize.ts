@@ -6,7 +6,7 @@ import { JsonSchema, PlainObject, SchemaCollection } from './objects'
 
 const debug = debugApi('schema-tools')
 
-export const isDynamicFormat = (formatDefaults: FormatDefaults | undefined) => (
+const isDynamicFormat = (formatDefaults: FormatDefaults | undefined) => (
   format: string,
 ) => (formatDefaults ? format in formatDefaults : false)
 
@@ -34,7 +34,7 @@ const hasPropertiesArray = prop =>
  * (like "date-time", "uuid") with default values.
  * @param schema
  */
-export const sanitizeBySchema = (
+const sanitizeBySchema = (
   schema: JsonSchema,
   formatDefaults?: FormatDefaults,
 ) => (object: PlainObject) => {
@@ -114,7 +114,7 @@ export const sanitizeBySchema = (
  * in the object with default values. Useful to replace UUIDs, timestamps, etc
  * with defaults before comparing with expected value.
  */
-export const sanitize = (
+const sanitize = (
   schemas: SchemaCollection,
   formatDefaults?: FormatDefaults,
 ) => (name: string, version: string) => (object: PlainObject) => {
@@ -126,3 +126,5 @@ export const sanitize = (
 
   return sanitizeBySchema(schema.schema, formatDefaults)(object)
 }
+
+export { sanitize, sanitizeBySchema, isDynamicFormat, isJsonSchema }

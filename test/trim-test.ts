@@ -5,7 +5,7 @@ import { schemas } from './example-schemas'
 const api = bind({ schemas: schemas })
 
 const schemaName = 'Person'
-const schemaVersion = '1.0.0'
+const schemaVersion = '1.2.0'
 
 test('has trim method', t => {
   t.is(typeof api.trim, 'function')
@@ -28,8 +28,13 @@ test('trim removes extra properties', t => {
   t.deepEqual(
     r,
     {
+      title: 'mr',
       name: 'Joe',
       age: 10,
+      traits: {
+        eyeColor: 'brown',
+        hairColor: 'black',
+      },
     },
     'extra property foo should be trimmed',
   )
