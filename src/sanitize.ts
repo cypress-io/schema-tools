@@ -24,7 +24,9 @@ const isStringArray = prop =>
   isArrayType(prop) && canPropertyBeString(prop.items.type)
 
 const isJsonSchema = o =>
-  isString(o.title) && o.properties && o.type === 'object'
+  isString(o.title) &&
+  o.properties &&
+  (o.type === 'object' || (Array.isArray(o.type) && o.type.includes('object')))
 
 const hasPropertiesArray = prop =>
   isArrayType(prop) && prop.items && isJsonSchema(prop.items)
@@ -127,4 +129,10 @@ const sanitize = (
   return sanitizeBySchema(schema.schema, formatDefaults)(object)
 }
 
-export { sanitize, sanitizeBySchema, isDynamicFormat, isJsonSchema }
+export {
+  sanitize,
+  sanitizeBySchema,
+  isDynamicFormat,
+  isJsonSchema,
+  hasPropertiesArray,
+}

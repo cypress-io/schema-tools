@@ -82,10 +82,12 @@
   "release": {
     "analyzeCommits": {
       "preset": "angular",
-      "releaseRules": [{
-        "type": "break",
-        "release": "major"
-      }]
+      "releaseRules": [
+        {
+          "type": "break",
+          "release": "major"
+        }
+      ]
     }
   }
 }
