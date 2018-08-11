@@ -57,7 +57,7 @@
     "prettier": "1.14.2",
     "semantic-release": "15.9.8",
     "terminal-banner": "1.1.0",
-    "ts-node": "6.2.0",
+    "ts-node": "7.0.1",
     "tslint": "5.11.0",
     "typescript": "2.9.2"
   },
