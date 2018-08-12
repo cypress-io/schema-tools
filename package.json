@@ -49,7 +49,7 @@
     "@types/node": "9.6.27",
     "@types/ramda": "0.25.34",
     "ava": "0.25.0",
-    "ava-ts": "0.25.0",
+    "ava-ts": "0.25.1",
     "common-tags": "1.8.0",
     "deps-ok": "1.4.1",
     "husky": "0.15.0-rc.13",
