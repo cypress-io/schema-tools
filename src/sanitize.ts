@@ -123,7 +123,9 @@ const sanitize = (
   assertSchema(schemas)(name, version)(object)
   const schema = getObjectSchema(schemas, name, version)
   if (!schema) {
-    throw new Error(`Could not schema ${name}@${version}`)
+    throw new Error(
+      `Could not find schema ${name}@${version} to sanitize an object`,
+    )
   }
 
   return sanitizeBySchema(schema.schema, formatDefaults)(object)

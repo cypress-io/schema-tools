@@ -1,7 +1,7 @@
-import { curry, keys, map, reduce, contains } from 'ramda'
+import { contains, curry, keys, map, reduce } from 'ramda'
 import { getObjectSchema } from './api'
 import { SchemaCollection, SchemaVersion } from './objects'
-import { isJsonSchema, hasPropertiesArray } from './sanitize'
+import { hasPropertiesArray, isJsonSchema } from './sanitize'
 
 // TODO: add types to input args
 const reduceToSchema = curry((schema, object: object) => {
@@ -35,7 +35,9 @@ const trimObject = (
 ) => {
   const schema = getObjectSchema(schemas, schemaName, version)
   if (!schema) {
-    throw new Error(`Could not schema ${schemaName}@${version}`)
+    throw new Error(
+      `Could not find schema ${schemaName}@${version} to trim an object`,
+    )
   }
   if (!object) {
     throw new Error('Expected an object to trim')
