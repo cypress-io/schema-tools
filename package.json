@@ -34,7 +34,7 @@
   "dependencies": {
     "@bahmutov/all-paths": "1.0.2",
     "@bahmutov/is-my-json-valid": "2.17.3",
-    "debug": "3.2.2",
+    "debug": "3.2.3",
     "json-stable-stringify": "1.0.1",
     "json2md": "1.6.1",
     "lodash.camelcase": "4.3.0",
