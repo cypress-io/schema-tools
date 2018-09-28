@@ -1,9 +1,9 @@
 import {
   CustomFormat,
   CustomFormats,
-  JsonSchemaFormats,
   detectors,
   extend,
+  JsonSchemaFormats,
 } from '../src'
 import { ObjectSchema, SchemaCollection, VersionedSchema } from '../src/objects'
 import { combineSchemas, versionSchemas } from '../src/utils'
@@ -22,6 +22,8 @@ const traits100: ObjectSchema = {
       eyeColor: {
         type: 'string',
         description: 'Eye color',
+        minLength: 2,
+        maxLength: 20,
       },
       hairColor: {
         type: 'string',
@@ -63,6 +65,7 @@ const person100: ObjectSchema = {
         type: 'string',
         format: 'name',
         description: 'this person needs a name',
+        minLength: 2,
       },
       age: {
         type: 'integer',
