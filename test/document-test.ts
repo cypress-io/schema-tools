@@ -6,11 +6,17 @@ import { documentCustomFormats } from '../src/document/doc-formats'
 import {
   documentObjectSchema,
   documentProperties,
+  documentProperty,
   documentSchema,
   findUsedColumns,
 } from '../src/document/utils'
 import { CustomFormats } from '../src/formats'
-import { JsonProperties, JsonSchema, ObjectSchema } from '../src/objects'
+import {
+  JsonProperties,
+  JsonProperty,
+  JsonSchema,
+  ObjectSchema,
+} from '../src/objects'
 import { exampleFormats, schemas } from './example-schemas'
 
 test('documents just schemas', t => {
@@ -41,6 +47,21 @@ test('document properties', t => {
   }
   const result = documentProperties(properties)
   t.snapshot(result)
+})
+
+test('document property with minLength and maxLength', t => {
+  t.plan(1)
+  const property: JsonProperty = {
+    type: 'string',
+    minLength: 5,
+    maxLength: 20,
+  }
+  const docProp = documentProperty([])
+  const result = docProp('test property', property)
+  t.snapshot({
+    property,
+    result,
+  })
 })
 
 test('documents schemas with package name', t => {
