@@ -43,6 +43,8 @@ export type JsonProperty = {
   maximum?: number
   minItems?: number
   maxItems?: number
+  minLength?: number
+  maxLength?: number
   description?: string
   required?: boolean | string[]
   properties?: JsonProperties
