@@ -94,13 +94,16 @@ type PropertyDescription = {
   format: string
   description: string
   enum: string
+  deprecated: string
+  minLength: string
+  maxLength: string
 }
 
 export const documentProperty = (
   requiredProperties: string[],
   schemas?: SchemaCollection,
   formats?: CustomFormats,
-) => (prop: string, value: JsonProperty) => {
+) => (prop: string, value: JsonProperty): PropertyDescription => {
   const isRequired = name => requiredProperties.indexOf(name) !== -1
   const typeText = type => (Array.isArray(type) ? type.join(' or ') : type)
   const deprecatedMessage = (value: JsonProperty) =>
@@ -114,8 +117,8 @@ export const documentProperty = (
     enum: enumToMarkdown(value.enum),
     description: value.description ? value.description : emptyMark,
     deprecated: deprecatedMessage(value),
-    minLength: value.minLength ? value.minLength : emptyMark,
-    maxLength: value.maxLength ? value.maxLength : emptyMark,
+    minLength: value.minLength ? String(value.minLength) : emptyMark,
+    maxLength: value.maxLength ? String(value.maxLength) : emptyMark,
   }
 }
 
@@ -161,6 +164,8 @@ export const documentSchema = (
       'enum',
       'description',
       'deprecated',
+      'minLength',
+      'maxLength',
     ]
     const usedHeaders = findUsedColumns(headers, rows)
     const table: object[] = [
