@@ -94,6 +94,32 @@ type PropertyDescription = {
   format: string
   description: string
   enum: string
+  deprecated: string
+  minLength: string
+  maxLength: string
+}
+
+export const documentProperty = (
+  requiredProperties: string[],
+  schemas?: SchemaCollection,
+  formats?: CustomFormats,
+) => (prop: string, value: JsonProperty): PropertyDescription => {
+  const isRequired = name => requiredProperties.indexOf(name) !== -1
+  const typeText = type => (Array.isArray(type) ? type.join(' or ') : type)
+  const deprecatedMessage = (value: JsonProperty) =>
+    value.deprecated ? `**deprecated** ${value.deprecated}` : emptyMark
+
+  return {
+    name: ticks(prop),
+    type: typeText(value.type),
+    required: isRequired(prop) ? checkMark : emptyMark,
+    format: formatToMarkdown(schemas, formats)(value),
+    enum: enumToMarkdown(value.enum),
+    description: value.description ? value.description : emptyMark,
+    deprecated: deprecatedMessage(value),
+    minLength: value.minLength ? String(value.minLength) : emptyMark,
+    maxLength: value.maxLength ? String(value.maxLength) : emptyMark,
+  }
 }
 
 export const documentProperties = (
@@ -105,24 +131,14 @@ export const documentProperties = (
   const requiredProperties: string[] = Array.isArray(required)
     ? required
     : Object.keys(properties)
-  const isRequired = name => requiredProperties.indexOf(name) !== -1
-  const typeText = type => (Array.isArray(type) ? type.join(' or ') : type)
-  const deprecatedMessage = (value: JsonProperty) =>
-    value.deprecated ? `**deprecated** ${value.deprecated}` : emptyMark
+
+  const docProperty = documentProperty(requiredProperties, schemas, formats)
 
   return Object.keys(properties)
     .sort()
     .map(prop => {
       const value: JsonProperty = properties[prop]
-      return {
-        name: ticks(prop),
-        type: typeText(value.type),
-        required: isRequired(prop) ? checkMark : emptyMark,
-        format: formatToMarkdown(schemas, formats)(value),
-        enum: enumToMarkdown(value.enum),
-        description: value.description ? value.description : emptyMark,
-        deprecated: deprecatedMessage(value),
-      }
+      return docProperty(prop, value)
     })
 }
 
@@ -148,6 +164,8 @@ export const documentSchema = (
       'enum',
       'description',
       'deprecated',
+      'minLength',
+      'maxLength',
     ]
     const usedHeaders = findUsedColumns(headers, rows)
     const table: object[] = [

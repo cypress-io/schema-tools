@@ -1,9 +1,9 @@
-import { schemaNames, getExample, setPackageName } from '../src'
-import { schemas } from './example-schemas'
-import test from 'ava'
-import { JsonSchema } from '../src/objects'
 import validator from '@bahmutov/is-my-json-valid'
+import test from 'ava'
 import { clone } from 'ramda'
+import { getExample, schemaNames, setPackageName } from '../src'
+import { JsonSchema } from '../src/objects'
+import { schemas } from './example-schemas'
 
 test('has schema names', t => {
   t.is(typeof schemaNames, 'function')
@@ -35,6 +35,7 @@ test('optional uri field', t => {
         format: 'uri',
       },
     },
+    additionalProperties: false,
   }
   const valid = validator(schema)
   t.true(valid({ url: 'https://foo.com' }), 'has url property')
