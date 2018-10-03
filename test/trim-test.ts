@@ -12,7 +12,12 @@ test('has trim method', t => {
 })
 
 test('trim returns a cloned object', t => {
-  const e: object = api.getExample(schemaName, schemaVersion) as object
+  t.plan(3)
+  const e = api.getExample(schemaName, schemaVersion)
+  if (!e) {
+    return
+  }
+
   t.truthy(e, 'we have an example')
   const r: object = api.trim(schemaName, schemaVersion, e)
   t.true(r !== e, 'returns new object')
