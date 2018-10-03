@@ -18,12 +18,13 @@ import {
   uniqBy,
   whereEq,
 } from 'ramda'
+import { fill } from './fill'
 import {
   CustomFormats,
-  FormatDefaults,
-  JsonSchemaFormats,
   detectors,
+  FormatDefaults,
   getDefaults,
+  JsonSchemaFormats,
 } from './formats'
 import {
   JsonSchema,
@@ -461,6 +462,7 @@ export const bind = (...options: BindOptions[]) => {
     validate: validate(schemas),
     trim: trim(schemas),
     hasSchema: hasSchema(schemas),
+    fill: fill(schemas),
   }
   return api
 }

@@ -1,12 +1,18 @@
 import test from 'ava'
 import { bind } from '../src/api'
-import { schemas as schemasA, exampleFormats } from './example-schemas'
+import { exampleFormats, schemas as schemasA } from './example-schemas'
 import { schemas as schemasB } from './other-schemas'
 
 const api = bind(
   { schemas: schemasA, formats: exampleFormats },
   { schemas: schemasB },
 )
+
+test('exposes list of bound methods', t => {
+  t.plan(1)
+  const names = Object.keys(api).sort()
+  t.snapshot(names)
+})
 
 test('bind api to schemas', t => {
   t.plan(0)
