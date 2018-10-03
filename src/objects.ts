@@ -36,6 +36,8 @@ export type JsonPropertyTypes =
   | string[]
   | number[]
 
+export type DefaultValue = null | boolean | number | string
+
 export type JsonProperty = {
   type: JsonPropertyTypes
   format?: string
@@ -61,9 +63,9 @@ export type JsonProperty = {
    * An explicit default value if we fill an object to match schema.
    * For now allows a limited set of primitive types
    *
-   * @type {(null | boolean | number | string)}
+   * @type {DefaultValue}
    */
-  defaultValue?: null | boolean | number | string
+  defaultValue?: DefaultValue
 }
 
 export type JsonProperties = {

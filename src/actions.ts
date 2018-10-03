@@ -1,5 +1,10 @@
-import { clone, equals, reject, mergeDeepRight } from 'ramda'
-import { JsonProperties, JsonPropertyTypes, ObjectSchema } from './objects'
+import { clone, equals, mergeDeepRight, reject } from 'ramda'
+import {
+  DefaultValue,
+  JsonProperties,
+  JsonPropertyTypes,
+  ObjectSchema,
+} from './objects'
 import { normalizeRequiredProperties } from './utils'
 
 //
@@ -19,6 +24,7 @@ type AddPropertyOptions = {
   exampleValue: any
   isRequired?: boolean
   propertyDescription?: string
+  defaultValue?: DefaultValue
   see?: string | ObjectSchema
 }
 
