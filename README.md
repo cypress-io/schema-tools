@@ -137,6 +137,7 @@ assertSchema(schemas, formats)('Employee', '1.0.0')(someObject)
 - [SchemaError](#schemaerror)
 - [addProperty](#addproperty)
 - [extend](#extend)
+- [oneOfRegex](#oneOfRegex)
 
 ### hasSchema
 
@@ -357,6 +358,18 @@ If `newSchemaObj.version` is not provided, then the previous schema's semver `mi
 Fields like `required` are automatically unioned.
 
 See [src/actions.ts](src/actions.ts) and [test/extend-schema-test.ts](test/extend-schema-test.ts) for examples.
+
+### oneOfRegex
+
+A little utility function to create a regular expression to match only the given strings.
+
+```js
+import { oneOfRegex } from '@cypress/schema-tools'
+const r = oneOfRegex('foo', 'bar')
+r.test('foo') // true
+r.test('bar') // true
+r.toString() // "/^(foo|bar)$/"
+```
 
 ## Debugging
 

@@ -1,13 +1,13 @@
 import camelCase from 'lodash.camelcase'
-import { map, path, uniq } from 'ramda'
 import reduce from 'lodash.reduce'
+import { map, path, uniq } from 'ramda'
 import {
+  JsonSchema,
   ObjectSchema,
   SchemaCollection,
   SchemaVersion,
   Semver,
   VersionedSchema,
-  JsonSchema,
 } from './objects'
 
 /**
@@ -101,4 +101,22 @@ export const combineSchemas = (...versioned: VersionedSchema[]) => {
     result[name] = v
   })
   return result
+}
+
+/**
+ * A little helper type to create array with at least 1 item.
+ * @see https://glebbahmutov.com/blog/trying-typescript/
+ */
+type UnemptyArray<T> = [T, ...T[]]
+
+/**
+ * Creates regular expression that matches only given list of strings.
+ *
+ * @example const r = oneOfRegex('foo', 'bar')
+ * r.test('foo') // true
+ * r.test('bar') // true
+ * r.test('FOO') // false
+ */
+export const oneOfRegex = (...values: UnemptyArray<string>) => {
+  return new RegExp(`^(${values.join('|')})$`)
 }
