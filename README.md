@@ -132,6 +132,7 @@ assertSchema(schemas, formats)('Employee', '1.0.0')(someObject)
 - [validate](#validate)
 - [assertSchema](#assertschema)
 - [trim](#trim)
+- [sanitize](#sanitize)
 - [bind](#bind)
 - [SchemaError](#schemaerror)
 - [addProperty](#addproperty)
@@ -277,6 +278,45 @@ const trimmed = trimPerson(person)
 // if the values are actually matching Person@1.0.0
 // all extra properties should have been removed
 ```
+
+### sanitize
+
+If you schema has dynamic data, like timestamps or uuids, it is impossible to compare objects without first deleting some fields, breaking the schema. To solve this you can mark some properties with format and if that format has a default value, you can replace all dynamic values with default ones.
+
+In the example below the `name` property has format called `name` like this
+
+```js
+name: {
+  type: 'string',
+  format: 'name'
+}
+```
+
+Now we can sanitize any object which will replace `name` value with default value, but will keep other properties unchanged.
+
+```js
+import { sanitize, getDefaults } from '@cypress/schema-tools'
+const name: CustomFormat = {
+  name: 'name',
+  description: 'Custom name format',
+  detect: /^[A-Z][a-z]+$/,
+  defaultValue: 'Buddy',
+}
+const exampleFormats: CustomFormats = {
+  name,
+}
+const formatDefaults = getDefaults(exampleFormats)
+const object = {
+  name: 'joe',
+  age: 21,
+}
+const sanitizePerson = sanitize(schemas, formatDefaults)('person', '1.0.0')
+// now pass any object with dynamic "name" property
+const result = sanitizePerson(object)
+// result is {name: 'Buddy', age: 21}
+```
+
+For another example see [test/sanitize-test.ts](test/sanitize-test.ts)
 
 ### bind
 
