@@ -116,3 +116,35 @@ test('addProperty respects isRequired false', t => {
   t.deepEqual(b.schema.required, ['foo'], 'bar should not be required')
   t.snapshot(b, 'new schema without required new property "bar"')
 })
+
+test('addProperty with default value', t => {
+  t.plan(1)
+  const person110 = addProperty(
+    {
+      schema: person100,
+      description: 'Person with title',
+    },
+    {
+      property: 'title',
+      propertyType: 'string',
+      propertyFormat: null,
+      exampleValue: 'mr',
+      isRequired: false,
+      propertyDescription: 'How to address this person',
+      defaultValue: 'Mr/Ms',
+    },
+    {
+      property: 'mood',
+      propertyType: 'string',
+      propertyFormat: null,
+      exampleValue: 'blue',
+      isRequired: false,
+      propertyDescription: 'How does this person feel',
+      defaultValue: 'happy',
+    },
+  )
+  t.snapshot(
+    person110,
+    'added two properties: title and mood with default values',
+  )
+})

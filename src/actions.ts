@@ -79,6 +79,10 @@ const addProperty = (
       newProp.see = options.see
     }
 
+    if ('defaultValue' in options) {
+      newProp.defaultValue = options.defaultValue
+    }
+
     newSchema.example[options.property] = clone(options.exampleValue)
   })
 
