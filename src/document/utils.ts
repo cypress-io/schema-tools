@@ -97,7 +97,11 @@ type PropertyDescription = {
   deprecated: string
   minLength: string
   maxLength: string
+  defaultValue: string
 }
+
+const existingProp = (name: string) => (o: object): string =>
+  name in o ? String(o[name]) : emptyMark
 
 export const documentProperty = (
   requiredProperties: string[],
@@ -117,8 +121,9 @@ export const documentProperty = (
     enum: enumToMarkdown(value.enum),
     description: value.description ? value.description : emptyMark,
     deprecated: deprecatedMessage(value),
-    minLength: value.minLength ? String(value.minLength) : emptyMark,
-    maxLength: value.maxLength ? String(value.maxLength) : emptyMark,
+    minLength: existingProp('minLength')(value),
+    maxLength: existingProp('maxLength')(value),
+    defaultValue: existingProp('defaultValue')(value),
   }
 }
 
@@ -166,6 +171,7 @@ export const documentSchema = (
       'deprecated',
       'minLength',
       'maxLength',
+      'defaultValue',
     ]
     const usedHeaders = findUsedColumns(headers, rows)
     const table: object[] = [

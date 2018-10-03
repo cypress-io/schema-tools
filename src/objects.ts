@@ -56,6 +56,14 @@ export type JsonProperty = {
   enum?: string[]
   // if the property is deprecated show this message
   deprecated?: string
+
+  /**
+   * An explicit default value if we fill an object to match schema.
+   * For now allows a limited set of primitive types
+   *
+   * @type {(null | boolean | number | string)}
+   */
+  defaultValue?: null | boolean | number | string
 }
 
 export type JsonProperties = {

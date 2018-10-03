@@ -64,6 +64,35 @@ test('document property with minLength and maxLength', t => {
   })
 })
 
+test('document property with minLength and maxLength at 0', t => {
+  t.plan(1)
+  const property: JsonProperty = {
+    type: 'string',
+    minLength: 0,
+    maxLength: 0,
+  }
+  const docProp = documentProperty([])
+  const result = docProp('test property', property)
+  t.snapshot({
+    property,
+    result,
+  })
+})
+
+test('document property with explicit default value', t => {
+  t.plan(1)
+  const property: JsonProperty = {
+    type: 'string',
+    defaultValue: 'foo Bar',
+  }
+  const docProp = documentProperty([])
+  const result = docProp('test property', property)
+  t.snapshot({
+    property,
+    result,
+  })
+})
+
 test('documents schemas with package name', t => {
   t.plan(1)
   const schemasWithName = clone(schemas)

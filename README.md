@@ -139,6 +139,7 @@ assertSchema(schemas, formats)('Employee', '1.0.0')(someObject)
 - [validate](#validate)
 - [assertSchema](#assertschema)
 - [trim](#trim)
+- [fill](#fill)
 - [sanitize](#sanitize)
 - [bind](#bind)
 - [SchemaError](#schemaerror)
@@ -286,6 +287,10 @@ const trimmed = trimPerson(person)
 // if the values are actually matching Person@1.0.0
 // all extra properties should have been removed
 ```
+
+### fill
+
+The opposite of `trim`. Tries to fill missing object properties with explicit default values from the schema. See [test/fill-test.ts](test/fill-test.ts) for example.
 
 ### sanitize
 
