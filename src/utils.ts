@@ -18,6 +18,19 @@ export const semverToString = (s: Semver): SchemaVersion =>
   `${s.major}.${s.minor}.${s.patch}`
 
 /**
+ * Converts semver string like "1.2.3" to Semver structure.
+ * @example stringToSemver("1.2.3") // {major: 1, minor: 2, patch: 3}
+ */
+export const stringToSemver = (s: SchemaVersion): Semver => {
+  const [major, minor, patch] = s.split('.')
+  return {
+    major: parseInt(major),
+    minor: parseInt(minor),
+    patch: parseInt(patch),
+  }
+}
+
+/**
  * Returns consistent name for a schema.
  *
  * @example normalizeName('membership_invitation') //> 'membershipInvitation'
