@@ -7,6 +7,7 @@ import {
   trimBySchema,
 } from '../src'
 
+// for comparison: here is how "trim" works
 test('trim removes extra property', t => {
   const schema: JsonSchema = {
     title: 'test schema',
@@ -69,6 +70,41 @@ test('fill adds required property using explicit default value', t => {
   // second property with explicit default value has been added
   t.deepEqual(result, {
     first: 1,
+    second: 99,
+  })
+})
+
+test('fill adds properties to an empty object', t => {
+  const schema: JsonSchema = {
+    title: 'test schema',
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+      first: {
+        type: 'number',
+        defaultValue: 14,
+      },
+      second: {
+        type: 'number',
+        defaultValue: 99,
+      },
+    },
+    required: ['first', 'second'],
+  }
+  const objectSchema: ObjectSchema = {
+    version: stringToSemver('1.0.0'),
+    schema,
+    example: {
+      first: 42,
+      second: 43,
+    },
+  }
+  // empty starting object
+  const o = {}
+  const result = fillBySchema(objectSchema, o)
+  // second property with explicit default value has been added
+  t.deepEqual(result, {
+    first: 14,
     second: 99,
   })
 })
