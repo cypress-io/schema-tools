@@ -10,6 +10,13 @@ Explicit [JSON schemas][json-schema] describing objects passed around in your sy
 - provide examples for tests and integrations
 - validate inputs and outputs of the API calls
 
+## TOC
+
+- [Schemas](#schemas)
+- [Formats](#formats)
+- [API](#api)
+- [Debugging](#debugging), [testing](#testing) and [license](#license)
+
 ## Schemas
 
 Each individual schema object should have 3 parts: a version, an example and a [JSON schema][json-schema] describing its properties. See [test/example-schemas.ts](test/example-schemas.ts). Start with a single `ObjectSchema` that describes a particular version of an object
@@ -137,7 +144,7 @@ assertSchema(schemas, formats)('Employee', '1.0.0')(someObject)
 - [SchemaError](#schemaerror)
 - [addProperty](#addproperty)
 - [extend](#extend)
-- [oneOfRegex](#oneOfRegex)
+- [oneOfRegex](#oneofregex)
 
 ### hasSchema
 
