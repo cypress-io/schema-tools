@@ -1,10 +1,15 @@
 import { curry, difference, keys, reduce } from 'ramda'
 import { getObjectSchema } from './api'
-import { ObjectSchema, SchemaCollection, SchemaVersion } from './objects'
+import {
+  ObjectSchema,
+  PlainObject,
+  SchemaCollection,
+  SchemaVersion,
+} from './objects'
 
 // TODO: add types to input args
 export const fillBySchema = curry(
-  (schema: ObjectSchema, object: object): object => {
+  (schema: ObjectSchema, object: PlainObject): PlainObject => {
     // @ts-ignore
     schema = schema.properties || (schema.schema || schema.items).properties
     const objectProps = keys(object)
@@ -12,7 +17,7 @@ export const fillBySchema = curry(
 
     const missingProperties = difference(schemaProps, objectProps)
     const filledObject = reduce(
-      (result: object, key: string): object => {
+      (result: PlainObject, key: string): PlainObject => {
         const property = schema[key]
         if ('defaultValue' in property) {
           const value = property.defaultValue
@@ -27,7 +32,7 @@ export const fillBySchema = curry(
       missingProperties,
     )
 
-    return filledObject
+    return <PlainObject>filledObject
   },
 )
 
@@ -36,7 +41,7 @@ const fillObject = (
   schemaName: string,
   version: SchemaVersion,
   object: object,
-) => {
+): PlainObject => {
   const schema = getObjectSchema(schemas, schemaName, version)
   if (!schema) {
     throw new Error(
@@ -47,7 +52,7 @@ const fillObject = (
     throw new Error('Expected an object to trim')
   }
 
-  return fillBySchema(schema, object)
+  return fillBySchema(schema, <PlainObject>object)
 }
 
 /**
