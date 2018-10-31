@@ -59,7 +59,7 @@
     "terminal-banner": "1.1.0",
     "ts-node": "7.0.1",
     "tslint": "5.11.0",
-    "typescript": "3.1.4"
+    "typescript": "3.1.5"
   },
   "repository": {
     "type": "git",
