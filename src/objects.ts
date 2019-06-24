@@ -9,6 +9,7 @@ export type PlainObject = {
     | null
     | undefined
     | string[]
+    | number[]
     | PlainObject
     | PlainObject[]
 }
