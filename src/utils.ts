@@ -40,7 +40,12 @@ export const normalizeName = (s: string): string => camelCase(s)
 export const normalizeRequiredProperties = (schema: JsonSchema) => {
   if (schema.required === true) {
     if (schema.properties) {
+      const findRequiredProperties = schema =>
+        reduce(schema.properties, reducer, [])
       const reducer = (memo, obj, key) => {
+        if (obj.type === 'object' && obj.properties && obj.required !== false) {
+          obj.required = findRequiredProperties(obj)
+        }
         if (obj.required !== false) {
           memo.push(key)
         }
@@ -48,7 +53,7 @@ export const normalizeRequiredProperties = (schema: JsonSchema) => {
         return memo
       }
 
-      schema.required = reduce(schema.properties, reducer, [])
+      schema.required = findRequiredProperties(schema)
     } else {
       schema.required = []
     }

@@ -118,6 +118,71 @@ const person120: ObjectSchema = extend(person110, {
   },
 })
 
+const person130: ObjectSchema = {
+  version: {
+    major: 1,
+    minor: 3,
+    patch: 0,
+  },
+  schema: {
+    type: 'object',
+    title: 'Person',
+    description: 'Person with nested object properties',
+    properties: {
+      name: {
+        type: 'object',
+        properties: {
+          first: {
+            type: 'string'
+          },
+          last: {
+            type: 'string'
+          }
+        }
+      },
+      age: {
+        type: 'integer',
+        minimum: 0,
+        description: 'Age in years',
+      },
+    },
+    required: true,
+    additionalProperties: false
+  },
+  example: {
+    name: {
+      first: 'Joe',
+      last: 'Dow'
+    },
+    age: 20
+  },
+}
+
+const person140: ObjectSchema = extend(person130, {
+  version: {
+    major: 1,
+    minor: 4,
+    patch: 0,
+  },
+  schema: {
+    type: 'object',
+    title: 'Person',
+    description: 'Person with nested object properties',
+    properties: {
+      yearOfBirth: {
+        type: 'integer',
+        minimum: 0,
+        description: 'Year of birth',
+      },
+    },
+    required: ['age', 'yearOfBirth'],
+  },
+  example: {
+    yearOfBirth: 1234,
+    age: 23
+  },
+})
+
 // example schema that has an array of "Person" objects
 const team100: ObjectSchema = {
   version: {
@@ -189,6 +254,8 @@ const personVersions: VersionedSchema = versionSchemas(
   person100,
   person110,
   person120,
+  person130,
+  person140
 )
 const teamVersions: VersionedSchema = versionSchemas(team100)
 const carVersions: VersionedSchema = versionSchemas(car100, car110)
