@@ -43,17 +43,29 @@ export const normalizeRequiredProperties = (schema: JsonSchema) => {
       const findRequiredProperties = schema =>
         reduce(schema.properties, reducer, [])
       const reducer = (memo, obj, key) => {
-        if (obj.type === 'object' && obj.properties && obj.required !== false) {
-          obj.required = findRequiredProperties(obj)
+        if (obj) {
+          if (
+            obj.type === 'object' &&
+            obj.properties &&
+            obj.required !== false
+          ) {
+            obj.required = findRequiredProperties(obj);
+          }
+          if (
+            obj.type === 'array' &&
+            obj.items &&
+            obj.items.type === 'object'
+          ) {
+            obj.items.required = findRequiredProperties(obj.items);
+          }
+          if (obj && obj.required !== false) {
+            memo.push(key);
+          }
         }
-        if (obj.required !== false) {
-          memo.push(key)
-        }
+        return memo;
+      };
 
-        return memo
-      }
-
-      schema.required = findRequiredProperties(schema)
+      schema.required = findRequiredProperties(schema);
     } else {
       schema.required = []
     }
