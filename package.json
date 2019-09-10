@@ -58,7 +58,7 @@
     "semantic-release": "15.13.24",
     "terminal-banner": "1.1.0",
     "ts-node": "7.0.1",
-    "tslint": "5.19.0",
+    "tslint": "5.20.0",
     "typescript": "3.3.4000"
   },
   "repository": {
