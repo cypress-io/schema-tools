@@ -4,7 +4,7 @@
   "description": "Validate, sanitize and document JSON schemas",
   "main": "dist",
   "module": "src",
-  "types": "src",
+  "types": "dist/index.d.ts",
   "scripts": {
     "prettier": "prettier --write 'src/**/*.ts'",
     "lint": "tslint --project .",
