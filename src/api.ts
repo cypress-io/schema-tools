@@ -446,7 +446,7 @@ export const bind = (...options: BindOptions[]) => {
 
   const allFormats: CustomFormats[] = filter(
     exists,
-    map(prop('formats'), options),
+    map(prop('formats'), options as Required<BindOptions>[]),
   )
   const formats = mergeFormats(allFormats)
 

@@ -16,8 +16,8 @@ export const fillBySchema = curry(
     const schemaProps = keys(schema)
 
     const missingProperties = difference(schemaProps, objectProps)
-    const filledObject = reduce(
-      (result: PlainObject, key: string): PlainObject => {
+    const filledObject = reduce<string | number, PlainObject>(
+      (result: PlainObject, key: string | number): PlainObject => {
         const property = schema[key]
         if ('defaultValue' in property) {
           const value = property.defaultValue

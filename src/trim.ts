@@ -18,7 +18,7 @@ export const trimBySchema = curry(
     schema = schema.properties || (schema.schema || schema.items).properties
     const objectProps = keys(object)
     const schemaProps = keys(schema)
-    return reduce(
+    return reduce<never, PlainObject>(
       (trimmedObj, prop) => {
         if (contains(prop, schemaProps)) {
           if (object[prop] && isJsonSchema(schema[prop])) {
