@@ -13,7 +13,7 @@
     "postbuild": "npm run check-transpiled-correctly",
     "check-transpiled-correctly": "node .",
     "deps": "deps-ok",
-    "size": "t=\"$(npm pack .)\"; wc -c \"${t}\"; tar tvf \"${t}\"; rm \"${t}\";",
+    "size": "npm pack --dry",
     "semantic-release": "semantic-release",
     "pretest": "npm run build",
     "test": "npm run unit",
@@ -42,12 +42,12 @@
     "lodash.reduce": "^4.6.0",
     "lodash.set": "4.3.2",
     "quote": "0.4.0",
-    "ramda": "0.25.0"
+    "ramda": "0.25.0",
+    "@types/ramda": "0.25.47"
   },
   "devDependencies": {
     "@types/lodash.camelcase": "4.3.6",
     "@types/node": "9.6.55",
-    "@types/ramda": "0.25.47",
     "ava": "2.4.0",
     "ava-ts": "0.25.2",
     "common-tags": "1.8.0",
