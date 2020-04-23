@@ -3,7 +3,6 @@
   "version": "0.0.0-development",
   "description": "Validate, sanitize and document JSON schemas",
   "main": "dist",
-  "module": "src",
   "types": "dist/index.d.ts",
   "scripts": {
     "prettier": "prettier --write 'src/**/*.ts'",
@@ -28,8 +27,7 @@
   "author": "Gleb Bahmutov <gleb@cypress.io>",
   "license": "MIT",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "dependencies": {
     "@bahmutov/all-paths": "1.0.2",
