@@ -40,8 +40,8 @@
     "lodash.reduce": "^4.6.0",
     "lodash.set": "4.3.2",
     "quote": "0.4.0",
-    "ramda": "0.25.0",
-    "@types/ramda": "0.25.47"
+    "ramda": "0.27.1",
+    "@types/ramda": "0.27.44"
   },
   "devDependencies": {
     "@types/lodash.camelcase": "4.3.6",
