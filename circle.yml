@@ -5,7 +5,7 @@ jobs:
     parallelism: 1
     working_directory: ~/repo
     docker:
-      - image: cypress/base:10
+      - image: cypress/base:14.17.3
     steps:
       - checkout
       - restore_cache:
