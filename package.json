@@ -53,7 +53,7 @@
     "husky": "7.0.4",
     "jsen": "0.6.6",
     "prettier": "2.5.1",
-    "semantic-release": "19.0.0",
+    "semantic-release": "19.0.1",
     "terminal-banner": "1.1.0",
     "ts-node": "7.0.1",
     "tslint": "5.20.1",
