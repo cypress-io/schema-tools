@@ -33,7 +33,7 @@ export type JsonSchemaFormats = {
  */
 export const detectors = (formats: CustomFormats) => {
   const result: JsonSchemaFormats = {}
-  Object.keys(formats).forEach(name => {
+  Object.keys(formats).forEach((name) => {
     result[name] = formats[name].detect
   })
   return result
@@ -65,7 +65,7 @@ export type FormatDefaults = {
  */
 export const getDefaults = (formats: CustomFormats) => {
   const result: FormatDefaults = {}
-  Object.keys(formats).forEach(key => {
+  Object.keys(formats).forEach((key) => {
     const format: CustomFormat = formats[key]
     if (typeof format.defaultValue !== 'undefined') {
       // store values under name, not under original key

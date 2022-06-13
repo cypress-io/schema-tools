@@ -18,7 +18,7 @@ export const documentCustomFormats = (formats: CustomFormats) => {
     'example',
     'default',
   ]
-  const rows = Object.keys(formats).map(name => {
+  const rows = Object.keys(formats).map((name) => {
     const format = formats[name]
     const formatName = format.name
     const r = format.detect.toString()
