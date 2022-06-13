@@ -166,8 +166,13 @@ export const validateBySchema =
     // TODO this could be cached, or even be part of the loaded module
     // when validating use our additional formats, like "uuid"
 
-    // @ts-ignore - ignoring for now; it doesn't like the shape of our JSON properties
-    const validate = validator(schema, { formats, greedy })
+    const validate = validator(
+      {
+        ...schema,
+        type: ['string'],
+      },
+      { formats, greedy },
+    )
     if (validate(object)) {
       return true
     }
