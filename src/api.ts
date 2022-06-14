@@ -1,4 +1,3 @@
-import validator from '@bahmutov/is-my-json-valid'
 import debugApi from 'debug'
 import stringify from 'json-stable-stringify'
 import get from 'lodash.get'
@@ -18,6 +17,7 @@ import {
   uniqBy,
   whereEq,
 } from 'ramda'
+import { validator } from './bridge-validator'
 import { fill } from './fill'
 import {
   CustomFormats,
