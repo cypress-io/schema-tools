@@ -327,7 +327,7 @@ const AssertBySchemaDefaults: AssertBySchemaOptions = {
 
 export const assertBySchema =
   (
-    schema: JsonSchema,
+    schema,
     example: PlainObject = {},
     options?: Partial<AssertBySchemaOptions>,
     label?: string,
