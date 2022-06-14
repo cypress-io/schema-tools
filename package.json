@@ -16,7 +16,7 @@
     "semantic-release": "semantic-release",
     "pretest": "npm run build",
     "test": "npm run unit",
-    "unit": "ava-ts -u --verbose test/*-test.ts",
+    "unit": "ava-ts --verbose test/*-test.ts",
     "repl": "ts-node"
   },
   "keywords": [

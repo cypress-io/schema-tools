@@ -33,7 +33,7 @@ test('invalid string is caught', t => {
   const result = validate({ t: 'bar' })
   t.false(result)
   t.deepEqual(validate.errors, [
-    { field: 'data.t', message: 'must be foo format' },
+    { field: 'data.t', message: 'must be foo format', value: '', type: '' },
   ])
 })
 

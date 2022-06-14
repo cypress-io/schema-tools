@@ -11,8 +11,9 @@ import test from 'ava'
         type: 'string',
         format: 'date-time',
       },
-    },
-    required: ['t'],
+    } as Record<string, any>,
+    required: true,
+    type: ['object'] as ("object" | "null")[]
   }
 
   test('valid date-time', t => {
@@ -30,13 +31,14 @@ import test from 'ava'
 ;(() => {
   // GOOD EXAMPLE uuid custom string format
   const schema = {
+    type: ['object'] as ("object" | "null")[],
     properties: {
       id: {
         type: 'string',
         format: 'uuid',
         required: true,
       },
-    },
+    } as Record<string, any>,
   }
   const formats = {
     uuid: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
@@ -56,15 +58,17 @@ import test from 'ava'
 })()
 ;(() => {
   const innerSchema = {
+    type: ['object'] as ("object" | "null")[],
     properties: {
       age: {
         type: 'integer',
         minimum: 1,
         required: true,
       },
-    },
+    } as Record<string, any>,
   }
   const schema = {
+    type: ['object'] as ("object" | "null")[],
     properties: {
       name: {
         type: 'string',
@@ -74,7 +78,7 @@ import test from 'ava'
         $ref: 'definitions#/age',
         required: true,
       },
-    },
+    }  as Record<string, any>,
   }
 
   const schemas = {
@@ -101,6 +105,7 @@ import test from 'ava'
     required: ['age'],
   }
   const schema = {
+    type: ['object'] as ("object" | "null")[],
     properties: {
       name: {
         type: 'string',
@@ -111,8 +116,9 @@ import test from 'ava'
         properties: innerSchema.properties,
         required: innerSchema.required,
       },
-    },
+    } as Record<string, any>,
     required: ['name', 'info'],
+    
   }
 
   test('valid age when using internal schema', t => {
