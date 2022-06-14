@@ -78,7 +78,7 @@ export type JsonSchema = {
   title: string
   type: 'object'
   description?: string
-  properties?: JsonProperties
+  properties: Record<string, any>
   patternProperties?: object
   // which properties are MUST have
   required?: string[] | true

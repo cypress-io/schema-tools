@@ -169,7 +169,7 @@ export const validateBySchema =
     const validate = validator(
       {
         ...schema,
-        type: ['string'],
+        type: ['object'],
       },
       { formats, greedy },
     )
