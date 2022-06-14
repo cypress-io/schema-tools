@@ -31,7 +31,7 @@
   ],
   "dependencies": {
     "@bahmutov/all-paths": "1.0.2",
-    "@bahmutov/is-my-json-valid": "2.17.3",
+    "is-my-json-valid": "2.20.6",
     "debug": "4.3.4",
     "json-stable-stringify": "1.0.1",
     "json2md": "1.6.3",
