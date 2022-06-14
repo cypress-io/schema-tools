@@ -1,10 +1,9 @@
-import validator from '@bahmutov/is-my-json-valid'
+import validator from 'is-my-json-valid'
 import test from 'ava'
 import { JsonSchemaFormats } from '../src/formats'
-import { JsonSchema } from '../src/objects'
 
-const schema: JsonSchema = {
-  type: 'object',
+const schema = {
+  type: ['object'] as ("object" | "null")[],
   title: 'testSchema',
   additionalProperties: false,
   properties: {
@@ -13,7 +12,7 @@ const schema: JsonSchema = {
       format: 'foo',
       description: 'this property could be a string in format "foo" or a null',
     },
-  },
+  } as Record<string, any>,
   required: ['t'],
 }
 
@@ -33,7 +32,8 @@ test('invalid string is caught', t => {
   const result = validate({ t: 'bar' })
   t.false(result)
   t.deepEqual(validate.errors, [
-    { field: 'data.t', message: 'must be foo format' },
+    //@ts-ignore
+    { field: 'data.t', message: 'must be foo format'},
   ])
 })
 

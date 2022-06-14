@@ -73,7 +73,7 @@ export const versionSchemas = (...schemas: ObjectSchema[]) => {
   }
 
   const result: VersionedSchema = {}
-  schemas.forEach(s => {
+  schemas.forEach((s) => {
     normalizeRequiredProperties(s.schema)
     const version = semverToString(s.version)
     result[version] = s
@@ -89,8 +89,8 @@ export const setPackageName = (
   schemas: SchemaCollection,
   packageName: string,
 ) => {
-  Object.keys(schemas).forEach(name => {
-    Object.keys(schemas[name]).forEach(version => {
+  Object.keys(schemas).forEach((name) => {
+    Object.keys(schemas[name]).forEach((version) => {
       const schema = schemas[name][version]
       if (!schema.package) {
         schema.package = packageName
@@ -108,7 +108,7 @@ export const setPackageName = (
  */
 export const combineSchemas = (...versioned: VersionedSchema[]) => {
   const result: SchemaCollection = {}
-  versioned.forEach(v => {
+  versioned.forEach((v) => {
     const title = v[Object.keys(v)[0]].schema.title
     const name = normalizeName(title)
     result[name] = v

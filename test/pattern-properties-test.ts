@@ -1,11 +1,10 @@
 import { assertBySchema } from '../src'
-import { JsonSchema } from '../src/objects'
 import test from 'ava'
 
 test('pattern properties', t => {
   t.plan(0)
-  const schema: JsonSchema = {
-    type: 'object',
+  const schema = {
+    type: ['object'] as ("object" | "null")[],
     title: 'test',
     // allow only properties that contains letter "a" like "a", "aa", "aaa", ...
     // and enumerated property "role"
@@ -17,6 +16,7 @@ test('pattern properties', t => {
         enum: ['admin', 'member'],
       },
     },
+    properties: {} as Record<string, any>,
     additionalProperties: false,
   }
 
