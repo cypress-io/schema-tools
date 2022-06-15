@@ -1,4 +1,4 @@
-import validator from '@bahmutov/is-my-json-valid'
+import { validator } from '../src/bridge-validator'
 import test from 'ava'
 import { JsonSchemaFormats } from '../src/formats'
 import { JsonSchema } from '../src/objects'
@@ -33,6 +33,7 @@ test('invalid string is caught', t => {
   const result = validate({ t: 'bar' })
   t.false(result)
   t.deepEqual(validate.errors, [
+    // @ts-ignore
     { field: 'data.t', message: 'must be foo format' },
   ])
 })

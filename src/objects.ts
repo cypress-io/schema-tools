@@ -59,6 +59,7 @@ export type JsonProperty = {
   enum?: string[]
   // if the property is deprecated show this message
   deprecated?: string
+  $ref?: string
 
   /**
    * An explicit default value if we fill an object to match schema.

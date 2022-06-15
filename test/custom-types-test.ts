@@ -1,11 +1,15 @@
-import validator from '@bahmutov/is-my-json-valid'
+import { validator } from '../src/bridge-validator'
 import test from 'ava'
 
 // looking at jsen as an alternative
 // import jsen from 'jsen'
-;(() => {
+;import { JsonProperties, JsonSchema } from '../src';
+(() => {
   // GOOD EXAMPLE date-time string format
-  const schema = {
+  const schema: JsonSchema = {
+    type: 'object',
+    title: 'testSchema',
+    additionalProperties: false,
     properties: {
       t: {
         type: 'string',
@@ -29,7 +33,10 @@ import test from 'ava'
 })()
 ;(() => {
   // GOOD EXAMPLE uuid custom string format
-  const schema = {
+  const schema: JsonSchema = {
+    type: 'object',
+    title: 'testSchema',
+    additionalProperties: false,
     properties: {
       id: {
         type: 'string',
@@ -64,13 +71,17 @@ import test from 'ava'
       },
     },
   }
-  const schema = {
+  const schema: JsonSchema = {
+    type: 'object',
+    title: 'testSchema',
+    additionalProperties: false,
     properties: {
       name: {
         type: 'string',
         required: true,
       },
       age: {
+        type: 'string',
         $ref: 'definitions#/age',
         required: true,
       },
@@ -97,10 +108,13 @@ import test from 'ava'
         type: 'integer',
         minimum: 1,
       },
-    },
+    } as JsonProperties,
     required: ['age'],
   }
-  const schema = {
+  const schema: JsonSchema = {
+    type: 'object',
+    title: 'testSchema',
+    additionalProperties: false,
     properties: {
       name: {
         type: 'string',

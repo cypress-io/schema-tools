@@ -186,7 +186,7 @@ export const validateBySchema = (
     const additionalProperties: string[] = difference(
       keys(object),
       keys(schema.properties),
-    )
+    ) as string[]
     hasData.message += ': ' + additionalProperties.join(', ')
   }
 

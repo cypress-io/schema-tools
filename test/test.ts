@@ -1,4 +1,4 @@
-import validator from '@bahmutov/is-my-json-valid'
+import { validator } from '../src/bridge-validator'
 import test from 'ava'
 import { clone } from 'ramda'
 import { getExample, schemaNames, setPackageName } from '../src'
