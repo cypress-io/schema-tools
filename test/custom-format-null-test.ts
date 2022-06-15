@@ -37,10 +37,6 @@ test('invalid string is caught', t => {
 test('null is allowed with custom format', t => {
   t.plan(1)
   const validate = validator(schema, { formats })
-  console.log(validate.toJSON())
-  const comparator = { t: null }
-  console.log(`COMPARATOR: `, comparator)
-  const result = validate(comparator)
-  console.log(`RESULT: `, result)
+  const result = validate({ t: null })
   t.true(result)
 })
