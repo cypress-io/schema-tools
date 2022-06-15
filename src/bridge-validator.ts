@@ -1,27 +1,19 @@
-import jsonValidator, { ValidationError } from 'is-my-json-valid'
-import { AnyNullableObjectSchema, AnySchema, Validator } from './bridge-validator-types';
-import { JsonSchemaFormats } from './formats';
-import { JsonSchema } from './objects';
+import jsonValidator from 'is-my-json-valid'
+import { AnyNullableObjectSchema, Validator } from './bridge-validator-types'
+import { JsonSchemaFormats } from './formats'
+import { JsonSchema } from './objects'
 
 export function validator(
-    schema: JsonSchema,
-    formats?: JsonSchemaFormats,
-    greedy: boolean = true,
-) {
+  schema: JsonSchema,
+  formats?: JsonSchemaFormats,
+  greedy: boolean = true,
+  schemas?: any,
+): Validator<AnyNullableObjectSchema> {
+  const bridgedSchema = {
+    ...schema,
+    properties: schema.properties as Record<string, any>,
+    type: ['object'] as ('object' | 'null')[],
+  } as AnyNullableObjectSchema
 
-    const bridgedSchema = {
-        ...schema,
-        properties: schema.properties as Record<string, any>,
-        type: ['object'] as ("object" | "null")[]
-    } as AnyNullableObjectSchema
-
-    const validate = jsonValidator(bridgedSchema, { formats, greedy })
-
-    return (object: object): Validator<AnyNullableObjectSchema> => {
-        return {
-            errors: [] as ValidationError[],
-            toJSON: () => { return bridgedSchema }
-        }
-    }
-
+  return jsonValidator(bridgedSchema, { formats, greedy, schemas })
 }
