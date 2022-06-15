@@ -4,9 +4,8 @@ import { JsonSchema } from './objects'
 
 export function validator(
   schema: JsonSchema,
-  options?: any
+  options?: any,
 ): Validator<AnyNullableObjectSchema> {
- 
   const bridgedSchema = {
     ...schema,
     properties: schema.properties as Record<string, any>,

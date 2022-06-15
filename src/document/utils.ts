@@ -23,7 +23,7 @@ export const checkMark = '✔'
  */
 export const emptyMark = ''
 
-const isCustomFormat = (formats: CustomFormats) => name => name in formats
+const isCustomFormat = (formats: CustomFormats) => (name) => name in formats
 
 const knownSchemaNames = (schemas: SchemaCollection) => schemaNames(schemas)
 
@@ -40,49 +40,48 @@ export const anchorForSchema = (s: ObjectSchema): string => {
   return anchor(nameAndVersion)
 }
 
-export const enumToMarkdown = enumeration => {
+export const enumToMarkdown = (enumeration) => {
   if (!enumeration) {
     return emptyMark
   }
   return ticks(enumeration.map(JSON.stringify).join(', '))
 }
 
-export const formatToMarkdown = (
-  schemas?: SchemaCollection,
-  formats?: CustomFormats,
-) => (value: JsonProperty): string => {
-  if (!value.format) {
-    if (value.see) {
-      if (typeof value.see === 'string') {
-        // try finding schema by name
-        return schemas && isSchemaName(schemas)(value.see)
-          ? `[${value.see}](#${toLower(normalizeName(value.see))})`
-          : ticks(value.see)
+export const formatToMarkdown =
+  (schemas?: SchemaCollection, formats?: CustomFormats) =>
+  (value: JsonProperty): string => {
+    if (!value.format) {
+      if (value.see) {
+        if (typeof value.see === 'string') {
+          // try finding schema by name
+          return schemas && isSchemaName(schemas)(value.see)
+            ? `[${value.see}](#${toLower(normalizeName(value.see))})`
+            : ticks(value.see)
+        } else {
+          const seeSchema: ObjectSchema = value.see
+          const schemaName = `${seeSchema.schema.title}`
+          const seeVersion = semverToString(seeSchema.version)
+          const nameAndVersion = `${schemaName}@${seeVersion}`
+          const seeAnchor = anchorForSchema(seeSchema)
+          return schemas && isSchemaName(schemas)(schemaName)
+            ? `[${nameAndVersion}](#${seeAnchor})`
+            : ticks(nameAndVersion)
+        }
       } else {
-        const seeSchema: ObjectSchema = value.see
-        const schemaName = `${seeSchema.schema.title}`
-        const seeVersion = semverToString(seeSchema.version)
-        const nameAndVersion = `${schemaName}@${seeVersion}`
-        const seeAnchor = anchorForSchema(seeSchema)
-        return schemas && isSchemaName(schemas)(schemaName)
-          ? `[${nameAndVersion}](#${seeAnchor})`
-          : ticks(nameAndVersion)
+        return emptyMark
       }
-    } else {
-      return emptyMark
     }
-  }
 
-  if (formats && isCustomFormat(formats)(value.format)) {
-    // point at the formats section
-    return `[${value.format}](#formats)`
-  }
+    if (formats && isCustomFormat(formats)(value.format)) {
+      // point at the formats section
+      return `[${value.format}](#formats)`
+    }
 
-  return ticks(value.format)
-}
+    return ticks(value.format)
+  }
 
 export const findUsedColumns = (headers: string[], rows: object[]) => {
-  const isUsed = (header: string) => find(r => r[header], rows)
+  const isUsed = (header: string) => find((r) => r[header], rows)
   const usedHeaders = headers.filter(isUsed)
   return usedHeaders
 }
@@ -100,32 +99,36 @@ type PropertyDescription = {
   defaultValue: string
 }
 
-const existingProp = (name: string) => (o: object): string =>
-  name in o ? String(o[name]) : emptyMark
+const existingProp =
+  (name: string) =>
+  (o: object): string =>
+    name in o ? String(o[name]) : emptyMark
 
-export const documentProperty = (
-  requiredProperties: string[],
-  schemas?: SchemaCollection,
-  formats?: CustomFormats,
-) => (prop: string, value: JsonProperty): PropertyDescription => {
-  const isRequired = name => requiredProperties.indexOf(name) !== -1
-  const typeText = type => (Array.isArray(type) ? type.join(' or ') : type)
-  const deprecatedMessage = (value: JsonProperty) =>
-    value.deprecated ? `**deprecated** ${value.deprecated}` : emptyMark
+export const documentProperty =
+  (
+    requiredProperties: string[],
+    schemas?: SchemaCollection,
+    formats?: CustomFormats,
+  ) =>
+  (prop: string, value: JsonProperty): PropertyDescription => {
+    const isRequired = (name) => requiredProperties.indexOf(name) !== -1
+    const typeText = (type) => (Array.isArray(type) ? type.join(' or ') : type)
+    const deprecatedMessage = (value: JsonProperty) =>
+      value.deprecated ? `**deprecated** ${value.deprecated}` : emptyMark
 
-  return {
-    name: ticks(prop),
-    type: typeText(value.type),
-    required: isRequired(prop) ? checkMark : emptyMark,
-    format: formatToMarkdown(schemas, formats)(value),
-    enum: enumToMarkdown(value.enum),
-    description: value.description ? value.description : emptyMark,
-    deprecated: deprecatedMessage(value),
-    minLength: existingProp('minLength')(value),
-    maxLength: existingProp('maxLength')(value),
-    defaultValue: existingProp('defaultValue')(value),
+    return {
+      name: ticks(prop),
+      type: typeText(value.type),
+      required: isRequired(prop) ? checkMark : emptyMark,
+      format: formatToMarkdown(schemas, formats)(value),
+      enum: enumToMarkdown(value.enum),
+      description: value.description ? value.description : emptyMark,
+      deprecated: deprecatedMessage(value),
+      minLength: existingProp('minLength')(value),
+      maxLength: existingProp('maxLength')(value),
+      defaultValue: existingProp('defaultValue')(value),
+    }
   }
-}
 
 export const documentProperties = (
   properties: JsonProperties,
@@ -141,7 +144,7 @@ export const documentProperties = (
 
   return Object.keys(properties)
     .sort()
-    .map(prop => {
+    .map((prop) => {
       const value: JsonProperty = properties[prop]
       return docProperty(prop, value)
     })
