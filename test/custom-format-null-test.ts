@@ -15,7 +15,7 @@ const schema = {
 
 const formats: JsonSchemaFormats = {
   // custom format "foo" can only be the string "FOO"
-  foo: /^FOO$/,
+  foo: /^(FOO|null)$/,
 }
 
 test('valid string in format foo', t => {
