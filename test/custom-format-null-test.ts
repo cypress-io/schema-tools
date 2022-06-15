@@ -1,12 +1,8 @@
 import { validator } from '../src/bridge-validator'
 import test from 'ava'
 import { JsonSchemaFormats } from '../src/formats'
-import { JsonSchema } from '../src/objects'
 
-const schema: JsonSchema = {
-  type: 'object',
-  title: 'testSchema',
-  additionalProperties: false,
+const schema = {
   properties: {
     t: {
       type: ['null', 'string'],
@@ -41,6 +37,10 @@ test('invalid string is caught', t => {
 test('null is allowed with custom format', t => {
   t.plan(1)
   const validate = validator(schema, { formats })
-  const result = validate({ t: null })
+  console.log(validate.toJSON())
+  const comparator = { t: null }
+  console.log(`COMPARATOR: `, comparator)
+  const result = validate(comparator)
+  console.log(`RESULT: `, result)
   t.true(result)
 })

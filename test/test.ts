@@ -25,7 +25,7 @@ test('returns example', t => {
 })
 
 test('optional uri field', t => {
-  const schema: JsonSchema = {
+  const schema = {
     title: 'Test',
     type: 'object',
     properties: {

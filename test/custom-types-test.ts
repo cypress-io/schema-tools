@@ -3,13 +3,9 @@ import test from 'ava'
 
 // looking at jsen as an alternative
 // import jsen from 'jsen'
-;import { JsonProperties, JsonSchema } from '../src';
-(() => {
+;(() => {
   // GOOD EXAMPLE date-time string format
-  const schema: JsonSchema = {
-    type: 'object',
-    title: 'testSchema',
-    additionalProperties: false,
+  const schema = {
     properties: {
       t: {
         type: 'string',
@@ -33,10 +29,7 @@ import test from 'ava'
 })()
 ;(() => {
   // GOOD EXAMPLE uuid custom string format
-  const schema: JsonSchema = {
-    type: 'object',
-    title: 'testSchema',
-    additionalProperties: false,
+  const schema = {
     properties: {
       id: {
         type: 'string',
@@ -71,17 +64,13 @@ import test from 'ava'
       },
     },
   }
-  const schema: JsonSchema = {
-    type: 'object',
-    title: 'testSchema',
-    additionalProperties: false,
+  const schema = {
     properties: {
       name: {
         type: 'string',
         required: true,
       },
       age: {
-        type: 'string',
         $ref: 'definitions#/age',
         required: true,
       },
@@ -108,13 +97,10 @@ import test from 'ava'
         type: 'integer',
         minimum: 1,
       },
-    } as JsonProperties,
+    },
     required: ['age'],
   }
-  const schema: JsonSchema = {
-    type: 'object',
-    title: 'testSchema',
-    additionalProperties: false,
+  const schema = {
     properties: {
       name: {
         type: 'string',
