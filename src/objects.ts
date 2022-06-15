@@ -40,7 +40,7 @@ export type JsonPropertyTypes =
 export type DefaultValue = null | boolean | number | string
 
 export type JsonProperty = {
-  type: JsonPropertyTypes
+  type?: JsonPropertyTypes
   format?: string
   minimum?: number
   maximum?: number

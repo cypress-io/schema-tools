@@ -1,8 +1,11 @@
-import { validator } from '../src/bridge-validator'
+import { LenientJsonSchema, validator } from '../src/bridge-validator'
 import test from 'ava'
 import { JsonSchemaFormats } from '../src/formats'
 
-const schema = {
+const schema: LenientJsonSchema = {
+  type: 'object',
+  title: 'testSchema',
+  additionalProperties: false,
   properties: {
     t: {
       type: ['null', 'string'],
@@ -15,7 +18,7 @@ const schema = {
 
 const formats: JsonSchemaFormats = {
   // custom format "foo" can only be the string "FOO"
-  foo: /^(FOO|null)$/,
+  foo: /^FOO$/,
 }
 
 test('valid string in format foo', t => {
@@ -29,7 +32,7 @@ test('invalid string is caught', t => {
   const result = validate({ t: 'bar' })
   t.false(result)
   t.deepEqual(validate.errors, [
-    // @ts-ignore
+    // @ts-ignore - runtime ensures this is working
     { field: 'data.t', message: 'must be foo format' },
   ])
 })

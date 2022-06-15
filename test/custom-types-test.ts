@@ -1,11 +1,11 @@
-import { validator } from '../src/bridge-validator'
+import { LenientJsonSchema, validator } from '../src/bridge-validator'
 import test from 'ava'
 
 // looking at jsen as an alternative
 // import jsen from 'jsen'
-;(() => {
+(() => {
   // GOOD EXAMPLE date-time string format
-  const schema = {
+  const schema: LenientJsonSchema = {
     properties: {
       t: {
         type: 'string',
@@ -29,7 +29,7 @@ import test from 'ava'
 })()
 ;(() => {
   // GOOD EXAMPLE uuid custom string format
-  const schema = {
+  const schema: LenientJsonSchema = {
     properties: {
       id: {
         type: 'string',
@@ -55,7 +55,7 @@ import test from 'ava'
   })
 })()
 ;(() => {
-  const innerSchema = {
+  const innerSchema: LenientJsonSchema = {
     properties: {
       age: {
         type: 'integer',
@@ -64,7 +64,7 @@ import test from 'ava'
       },
     },
   }
-  const schema = {
+  const schema: LenientJsonSchema = {
     properties: {
       name: {
         type: 'string',
@@ -91,7 +91,7 @@ import test from 'ava'
   })
 })()
 ;(() => {
-  const innerSchema = {
+  const innerSchema: LenientJsonSchema = {
     properties: {
       age: {
         type: 'integer',
@@ -100,7 +100,7 @@ import test from 'ava'
     },
     required: ['age'],
   }
-  const schema = {
+  const schema: LenientJsonSchema = {
     properties: {
       name: {
         type: 'string',

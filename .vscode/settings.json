@@ -3,7 +3,7 @@
   "prettier.singleQuote": true,
   "editor.formatOnSave": true,
   "files.exclude": {
-    "node_modules/": true,
+    "node_modules/": false,
     "dist/": true
   },
   "git.ignoreLimitWarning": true
