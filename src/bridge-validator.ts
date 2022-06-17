@@ -1,5 +1,6 @@
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
+import keywords from 'ajv-keywords'
 import { JsonSchemaFormats, ValidationError } from '.'
 import { JsonSchema } from './objects'
 
@@ -36,8 +37,6 @@ type Validator = {
   errors: ValidationError[]
 }
 
-// type LegacyProperty
-
 export function validator(
   schema: LenientJsonSchema,
   options?: {
@@ -46,25 +45,39 @@ export function validator(
     schemas?: SchemasOption
   },
 ): Validator {
-  // TODO: Traverse schema and
-
-  // for each LenientJsonSchema level:
-  // Grab all properties with `required: true`
-  // Add their names to an array
-  // Strip `required: true` from the property field
-  // Add `required: [<FIELD_NAMES]` at same level as `properties` field
-
   const requiredFields = [] as string[]
   const strippedProperties = {} as Record<string, any>
   const unmodifiedProperties = {} as Record<string, any>
+  let nameMinLength = 0
+  let nameMaxLength = 0
   if (schema.properties) {
     Object.keys(schema.properties).forEach((property) => {
-      if (schema.properties![property].required) {
-        requiredFields.push(property)
-        const clone = Object.assign({}, schema.properties![property])
-        delete clone.required
-        strippedProperties[property] = clone
+      if (
+        schema.properties![property].required ||
+        schema.properties![property].see
+      ) {
+        if (schema.properties![property].required) {
+          requiredFields.push(property)
+          const clone = Object.assign({}, schema.properties![property])
+          // Strip required so we can leave tests alone - there are places where we have `required: true`, which is not supported normally - it MUST be an array, when used
+          delete clone.required
+          strippedProperties[property] = clone
+        }
+
+        if (schema.properties![property].see) {
+          requiredFields.push(property)
+          const clone = Object.assign({}, schema.properties![property])
+          clone.$ref = clone.see as string
+          delete clone.see
+          strippedProperties[property] = clone
+        }
       } else {
+        if (property === 'name') {
+          if (schema.properties![property].minLength)
+            nameMinLength = schema.properties![property].minLength!
+          if (schema.properties![property].maxLength)
+            nameMaxLength = schema.properties![property].maxLength!
+        }
         unmodifiedProperties[property] = schema.properties![property]
       }
     })
@@ -92,23 +105,34 @@ export function validator(
     })
   }
 
-  // Add built in formats
-  addFormats(ajv)
+  keywords(ajv)
+  addFormats(ajv) // adds built-in formats
   ajv.addFormat('name', {
     type: 'string',
-    // options and formats are already known to be defined by this point
-    validate: (x) => x.length > 0,
+    validate: (x) => x.length >= nameMinLength && x.length <= nameMaxLength,
   })
   ajv.addFormat('hookId', {
     type: 'string',
-    // options and formats are already known to be defined by this point
     validate: (x) => x.length > 0,
   })
 
-  const validate = ajv.compile(bridgedSchema) as any
+  const validate = ajv.compile(bridgedSchema)
   // Map raw errors to the ValidationError shape
   // const rawErrors = validate.errors
-  validate.errors = []
+  const adaptedErrors: ValidationError[] = validate.errors
+    ? validate.errors.map((error) => {
+        return {
+          field: error.propertyName || ``,
+          message: error.message || ``,
+        }
+      })
+    : []
 
-  return validate
+  function adaptedValidator(schema: any) {
+    return () => validate(schema)
+  }
+
+  adaptedValidator.errors = adaptedErrors
+
+  return adaptedValidator
 }

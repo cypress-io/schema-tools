@@ -34,6 +34,7 @@
     "@types/ramda": "0.25.47",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
+    "ajv-keywords": "^5.1.0",
     "debug": "4.3.4",
     "is-my-json-valid": "2.20.6",
     "json-stable-stringify": "1.0.1",
