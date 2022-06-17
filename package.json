@@ -16,7 +16,7 @@
     "semantic-release": "semantic-release",
     "pretest": "npm run build",
     "test": "npm run unit",
-    "unit": "ava-ts --verbose test/*-test.ts",
+    "unit": "ava-ts -u --verbose test/*-test.ts",
     "repl": "ts-node"
   },
   "keywords": [
@@ -31,8 +31,11 @@
   ],
   "dependencies": {
     "@bahmutov/all-paths": "1.0.2",
-    "is-my-json-valid": "2.20.6",
+    "@types/ramda": "0.25.47",
+    "ajv": "^8.11.0",
+    "ajv-formats": "^2.1.1",
     "debug": "4.3.4",
+    "is-my-json-valid": "2.20.6",
     "json-stable-stringify": "1.0.1",
     "json2md": "1.6.3",
     "lodash.camelcase": "4.3.0",
@@ -40,8 +43,7 @@
     "lodash.reduce": "^4.6.0",
     "lodash.set": "4.3.2",
     "quote": "0.4.0",
-    "ramda": "0.25.0",
-    "@types/ramda": "0.25.47"
+    "ramda": "0.25.0"
   },
   "devDependencies": {
     "@types/lodash.camelcase": "4.3.7",

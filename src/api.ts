@@ -129,7 +129,7 @@ export const getExample = curry(
  * Error returned by the json validation library.
  * Has an error message for specific property
  */
-type ValidationError = {
+export type ValidationError = {
   field: string
   message: string
 }
