@@ -33,7 +33,7 @@
     "@bahmutov/all-paths": "1.0.2",
     "@types/ramda": "0.25.47",
     "debug": "4.3.4",
-    "is-my-json-valid": "github:ax-vasquez/is-my-json-valid",
+    "is-my-json-valid": "github:ax-vasquez/is-my-json-valid#b875c39b07f757593d9b9123e023b8fd2c350a0c",
     "json-stable-stringify": "1.0.1",
     "json2md": "1.6.3",
     "lodash.camelcase": "4.3.0",
