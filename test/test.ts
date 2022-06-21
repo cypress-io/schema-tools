@@ -1,4 +1,4 @@
-import validator from '@bahmutov/is-my-json-valid'
+import validator from 'is-my-json-valid'
 import test from 'ava'
 import { clone } from 'ramda'
 import { getExample, schemaNames, setPackageName } from '../src'

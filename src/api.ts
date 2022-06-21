@@ -1,4 +1,4 @@
-import validator from '@bahmutov/is-my-json-valid'
+import validator from 'is-my-json-valid'
 import debugApi from 'debug'
 import stringify from 'json-stable-stringify'
 import get from 'lodash.get'
@@ -39,12 +39,11 @@ import * as utils from './utils'
 
 const debug = debugApi('schema-tools')
 
-export const getVersionedSchema = (schemas: SchemaCollection) => (
-  name: string,
-) => {
-  name = utils.normalizeName(name)
-  return schemas[name]
-}
+export const getVersionedSchema =
+  (schemas: SchemaCollection) => (name: string) => {
+    name = utils.normalizeName(name)
+    return schemas[name]
+  }
 
 const _getObjectSchema = (
   schemas: SchemaCollection,
@@ -101,15 +100,14 @@ export const schemaNames = (schemas: SchemaCollection) =>
  *
  * @param schemaName Schema name to look up
  */
-export const getSchemaVersions = (schemas: SchemaCollection) => (
-  schemaName: string,
-) => {
-  schemaName = utils.normalizeName(schemaName)
-  if (schemas[schemaName]) {
-    return Object.keys(schemas[schemaName])
+export const getSchemaVersions =
+  (schemas: SchemaCollection) => (schemaName: string) => {
+    schemaName = utils.normalizeName(schemaName)
+    if (schemas[schemaName]) {
+      return Object.keys(schemas[schemaName])
+    }
+    return []
   }
-  return []
-}
 
 /**
  * Returns our example for a schema with given version. Curried
@@ -162,37 +160,38 @@ const errorsToStrings = (errors: ValidationError[]): string[] =>
 /**
  * Validates given object using JSON schema. Returns either 'true' or list of string errors
  */
-export const validateBySchema = (
-  schema: JsonSchema,
-  formats?: JsonSchemaFormats,
-  greedy: boolean = true,
-) => (object: object): true | string[] => {
-  // TODO this could be cached, or even be part of the loaded module
-  // when validating use our additional formats, like "uuid"
-  const validate = validator(schema, { formats, greedy })
-  if (validate(object)) {
-    return true
-  }
+export const validateBySchema =
+  (schema: JsonSchema, formats?: JsonSchemaFormats, greedy: boolean = true) =>
+  (object: object): true | string[] => {
+    // TODO this could be cached, or even be part of the loaded module
+    // when validating use our additional formats, like "uuid"
+    const validate = validator(schema, { formats, greedy })
+    if (validate(object)) {
+      return true
+    }
 
-  const uniqueErrors: ValidationError[] = uniqBy(errorToString, validate.errors)
-
-  if (
-    includesDataHasAdditionalPropertiesError(uniqueErrors) &&
-    keys(schema.properties).length
-  ) {
-    const hasData: ValidationError = findDataHasAdditionalProperties(
-      uniqueErrors,
-    ) as ValidationError
-    const additionalProperties: string[] = difference(
-      keys(object),
-      keys(schema.properties),
+    const uniqueErrors: ValidationError[] = uniqBy(
+      errorToString,
+      validate.errors,
     )
-    hasData.message += ': ' + additionalProperties.join(', ')
-  }
 
-  const errors = uniq(errorsToStrings(uniqueErrors))
-  return errors
-}
+    if (
+      includesDataHasAdditionalPropertiesError(uniqueErrors) &&
+      keys(schema.properties).length
+    ) {
+      const hasData: ValidationError = findDataHasAdditionalProperties(
+        uniqueErrors,
+      ) as ValidationError
+      const additionalProperties: string[] = difference(
+        keys(object),
+        keys(schema.properties),
+      )
+      hasData.message += ': ' + additionalProperties.join(', ')
+    }
+
+    const errors = uniq(errorsToStrings(uniqueErrors))
+    return errors
+  }
 
 /**
  * Validates an object against given schema and version
@@ -204,29 +203,30 @@ export const validateBySchema = (
  *  If there are any validation errors returns list of strings
  *
  */
-export const validate = (
-  schemas: SchemaCollection,
-  formats?: JsonSchemaFormats,
-  greedy: boolean = true,
-) => (schemaName: string, version: string) => (
-  object: object,
-): true | string[] => {
-  schemaName = utils.normalizeName(schemaName)
+export const validate =
+  (
+    schemas: SchemaCollection,
+    formats?: JsonSchemaFormats,
+    greedy: boolean = true,
+  ) =>
+  (schemaName: string, version: string) =>
+  (object: object): true | string[] => {
+    schemaName = utils.normalizeName(schemaName)
 
-  const namedSchemas = schemas[schemaName]
-  if (!namedSchemas) {
-    return [`Missing schema ${schemaName}`]
+    const namedSchemas = schemas[schemaName]
+    if (!namedSchemas) {
+      return [`Missing schema ${schemaName}`]
+    }
+
+    const aSchema = namedSchemas[version] as ObjectSchema
+    if (!aSchema) {
+      return [`Missing schema ${schemaName}@${version}`]
+    }
+
+    // TODO this could be cached, or even be part of the loaded module
+    // when validating use our additional formats, like "uuid"
+    return validateBySchema(aSchema.schema, formats, greedy)(object)
   }
-
-  const aSchema = namedSchemas[version] as ObjectSchema
-  if (!aSchema) {
-    return [`Missing schema ${schemaName}@${version}`]
-  }
-
-  // TODO this could be cached, or even be part of the loaded module
-  // when validating use our additional formats, like "uuid"
-  return validateBySchema(aSchema.schema, formats, greedy)(object)
-}
 
 /**
  * Error thrown when an object does not pass schema.
@@ -318,67 +318,73 @@ const AssertBySchemaDefaults: AssertBySchemaOptions = {
   },
 }
 
-export const assertBySchema = (
-  schema: JsonSchema,
-  example: PlainObject = {},
-  options?: Partial<AssertBySchemaOptions>,
-  label?: string,
-  formats?: JsonSchemaFormats,
-  schemaVersion?: SchemaVersion,
-) => (object: PlainObject) => {
-  const allOptions = mergeDeepLeft(
-    options || AssertBySchemaDefaults,
-    AssertBySchemaDefaults,
-  )
+export const assertBySchema =
+  (
+    schema: JsonSchema,
+    example: PlainObject = {},
+    options?: Partial<AssertBySchemaOptions>,
+    label?: string,
+    formats?: JsonSchemaFormats,
+    schemaVersion?: SchemaVersion,
+  ) =>
+  (object: PlainObject) => {
+    const allOptions = mergeDeepLeft(
+      options || AssertBySchemaDefaults,
+      AssertBySchemaDefaults,
+    )
 
-  const replace = () => {
-    const cloned = clone(object)
-    allOptions.substitutions.forEach(property => {
-      const value = get(example, property)
-      set(cloned, property, value)
-    })
-    return cloned
+    const replace = () => {
+      const cloned = clone(object)
+      allOptions.substitutions.forEach((property) => {
+        const value = get(example, property)
+        set(cloned, property, value)
+      })
+      return cloned
+    }
+
+    const replaced = allOptions.substitutions.length ? replace() : object
+    const result = validateBySchema(
+      schema,
+      formats,
+      allOptions.greedy,
+    )(replaced)
+    if (result === true) {
+      return object
+    }
+
+    const title = label ? `Schema ${label} violated` : 'Schema violated'
+    const emptyLine = ''
+    let parts = [title]
+
+    if (!allOptions.omit.errors) {
+      parts = parts.concat([emptyLine, 'Errors:']).concat(result)
+    }
+
+    if (!allOptions.omit.object) {
+      const objectString = stringify(replaced, { space: '  ' })
+      parts = parts.concat([emptyLine, 'Current object:', objectString])
+    }
+
+    if (!allOptions.omit.example) {
+      const exampleString = stringify(example, { space: '  ' })
+      parts = parts.concat([
+        emptyLine,
+        'Expected object like this:',
+        exampleString,
+      ])
+    }
+
+    const message = parts.join('\n')
+
+    throw new SchemaError(
+      message,
+      result,
+      replaced,
+      example,
+      schema.title,
+      schemaVersion,
+    )
   }
-
-  const replaced = allOptions.substitutions.length ? replace() : object
-  const result = validateBySchema(schema, formats, allOptions.greedy)(replaced)
-  if (result === true) {
-    return object
-  }
-
-  const title = label ? `Schema ${label} violated` : 'Schema violated'
-  const emptyLine = ''
-  let parts = [title]
-
-  if (!allOptions.omit.errors) {
-    parts = parts.concat([emptyLine, 'Errors:']).concat(result)
-  }
-
-  if (!allOptions.omit.object) {
-    const objectString = stringify(replaced, { space: '  ' })
-    parts = parts.concat([emptyLine, 'Current object:', objectString])
-  }
-
-  if (!allOptions.omit.example) {
-    const exampleString = stringify(example, { space: '  ' })
-    parts = parts.concat([
-      emptyLine,
-      'Expected object like this:',
-      exampleString,
-    ])
-  }
-
-  const message = parts.join('\n')
-
-  throw new SchemaError(
-    message,
-    result,
-    replaced,
-    example,
-    schema.title,
-    schemaVersion,
-  )
-}
 
 /**
  * Validates given object against a schema, throws an error if schema
@@ -397,31 +403,27 @@ export const assertBySchema = (
  *  .then(assertSchema('organization', '1.0.0', ['id']))
  *  .then(useOrganization)
  */
-export const assertSchema = (
-  schemas: SchemaCollection,
-  formats?: JsonSchemaFormats,
-) => (
-  name: string,
-  version: string,
-  options?: Partial<AssertBySchemaOptions>,
-) => (object: PlainObject) => {
-  const example = getExample(schemas)(name)(version)
-  const schema = getObjectSchema(schemas)(name)(version)
-  if (!schema) {
-    throw new Error(`Could not find schema ${name}@${version}`)
+export const assertSchema =
+  (schemas: SchemaCollection, formats?: JsonSchemaFormats) =>
+  (name: string, version: string, options?: Partial<AssertBySchemaOptions>) =>
+  (object: PlainObject) => {
+    const example = getExample(schemas)(name)(version)
+    const schema = getObjectSchema(schemas)(name)(version)
+    if (!schema) {
+      throw new Error(`Could not find schema ${name}@${version}`)
+    }
+    // TODO we can read title and description from the JSON schema itself
+    // so external label would not be necessary
+    const label = `${name}@${version}`
+    return assertBySchema(
+      schema.schema,
+      example,
+      options,
+      label,
+      formats,
+      utils.semverToString(schema.version),
+    )(object)
   }
-  // TODO we can read title and description from the JSON schema itself
-  // so external label would not be necessary
-  const label = `${name}@${version}`
-  return assertBySchema(
-    schema.schema,
-    example,
-    options,
-    label,
-    formats,
-    utils.semverToString(schema.version),
-  )(object)
-}
 
 type BindOptions = {
   schemas: SchemaCollection
@@ -434,7 +436,7 @@ const mergeSchemas = (schemas: SchemaCollection[]): SchemaCollection =>
 const mergeFormats = (formats: CustomFormats[]): CustomFormats =>
   mergeAll(formats)
 
-const exists = x => Boolean(x)
+const exists = (x) => Boolean(x)
 
 /**
  * Given schemas and formats creates "mini" API bound to the these schemas.
