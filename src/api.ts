@@ -1,8 +1,7 @@
 import validator from 'is-my-json-valid'
 import debugApi from 'debug'
 import stringify from 'json-stable-stringify'
-import get from 'lodash.get'
-import set from 'lodash.set'
+import { get, set } from 'lodash'
 import {
   clone,
   curry,
