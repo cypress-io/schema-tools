@@ -7,6 +7,9 @@ jobs:
     docker:
       - image: cypress/base:14.17.3
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 'SHA256:gN8aOCVRuaCpKCQJvmQPYmOeHXWigALxpMTXOLeZs94'
       - checkout
       - restore_cache:
           key: repo-{{ .Branch }}-2
