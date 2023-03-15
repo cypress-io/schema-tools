@@ -1,5 +1,4 @@
-import camelCase from 'lodash.camelcase'
-import reduce from 'lodash.reduce'
+import { reduce, camelCase } from 'lodash'
 import { map, path, uniq } from 'ramda'
 import {
   JsonSchema,
