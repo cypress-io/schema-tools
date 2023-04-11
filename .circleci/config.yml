@@ -14,7 +14,7 @@ jobs:
       - checkout
       - restore_cache:
           key: repo-{{ .Branch }}-2
-      - run: npm ci
+      - run: npm ci --force
       - save_cache:
           key: repo-{{ .Branch }}-2-{{ checksum "package.json" }}
           paths:
