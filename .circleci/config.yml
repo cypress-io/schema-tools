@@ -2,6 +2,7 @@ version: 2
 
 jobs:
   test:
+    context: services:npm-publish
     parallelism: 1
     working_directory: ~/repo
     docker:
