@@ -6,7 +6,7 @@ jobs:
     parallelism: 1
     working_directory: ~/repo
     docker:
-      - image: cypress/base:14.17.3
+      - image: cypress/base:16.18.1-with-git
     steps:
       - add_ssh_keys:
           fingerprints:
