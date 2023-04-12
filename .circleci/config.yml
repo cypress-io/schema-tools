@@ -2,7 +2,6 @@ version: 2
 
 jobs:
   test:
-    context: services:npm-publish
     parallelism: 1
     working_directory: ~/repo
     docker:
@@ -22,10 +21,11 @@ jobs:
       - run: npm run build
       - run: npm test
       - run: npm run size
-      - run: npm run semantic-release || true
+      - run: npm run semantic-release
 
 workflows:
   version: 2
   test:
     jobs:
-      - test
+      - test:
+          context: services:npm-publish
