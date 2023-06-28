@@ -47,7 +47,7 @@
     "ava-ts": "0.25.2",
     "common-tags": "1.8.2",
     "deps-ok": "1.4.1",
-    "husky": "7.0.4",
+    "husky": "8.0.3",
     "jsen": "0.6.6",
     "prettier": "2.7.1",
     "semantic-release": "19.0.3",
